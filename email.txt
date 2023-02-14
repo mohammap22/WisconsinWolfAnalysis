@@ -1,13 +1,12 @@
-Hello Melissa, 
+Hi Melissa,
 
-We are writing to you with some questions regarding our group's project and data sources. Our group is working on a project that involves analyzing the population of wolves in Wisconsin, and we have come across some interesting data in PDF documents. However, the issue we are facing is that we would have to scrape the data or extract it manually. Below are some of our data sources. 
+Our team is currently working to validate data sources for the Wisconsin wolf population and impact project. We've found tabular data in yearly PDF reports produced by the Wisconsin Department of Natural Resources for multiple populations of interest (e.g., wolves, deer, hunters).
+
+Before we begin scraping or manually extracting the data, are PDF documents considered adequately complex data sources for this project? We've included two representative reports below for reference:
 
 Wolf Statistics: https://widnr.widen.net/s/nlrl7tzdw5/wisconsin_gray_wolf_report_2022
 Deer Statistics: https://widnr.widen.net/s/wnf2wbjwjf/deerpopulation.2021
 
-We were wondering if using PDF documents as a data source is considered too simple or not sufficient for the project requirements. Would it be possible for you to provide some guidance on the matter? 
 
-Thank you for your time and assistance. We look forward to hearing back from you soon.
-
-Best regards,
-Team Wolf 
+Thanks,
+Team Wolf
