@@ -9,6 +9,8 @@ Questions of Interest:
     Wisconsin deer population
     2. Has the growing wolf population led to an increase in the number of 
     interactions between people and wolves?
+    3. Time permitting, how have the lives and deaths of wolves changed over the
+    reporting period?
 
 Goal of the Project:
     The goal of this project is to perform a statistical analysis on the impact 
