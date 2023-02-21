@@ -1,0 +1,12 @@
+Hi Melissa,
+
+Our team is currently working to validate data sources for the Wisconsin wolf population and impact project. We've found tabular data in yearly PDF reports produced by the Wisconsin Department of Natural Resources for multiple populations of interest (e.g., wolves, deer, hunters).
+
+Before we begin scraping or manually extracting the data, are PDF documents considered adequately complex data sources for this project? We've included two representative reports below for reference:
+
+Wolf Statistics: https://widnr.widen.net/s/nlrl7tzdw5/wisconsin_gray_wolf_report_2022
+Deer Statistics: https://widnr.widen.net/s/wnf2wbjwjf/deerpopulation.2021
+
+
+Thanks,
+Team Wolf
