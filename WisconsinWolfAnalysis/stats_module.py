@@ -2,6 +2,7 @@
 
 def hypothesis_function_one():
     """MODULE DOCSTRING GOES HERE"""
+    print("This is hypothesis function 1")
     return "Nothing written yet"
 
 
