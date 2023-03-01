@@ -25,3 +25,8 @@ Data Sources:
         https://apps.dnr.wi.gov/deermetrics/LaunchPage.aspx
     3. Wisonsin Gray Wolf Monitoring Report:
         https://apps.dnr.wi.gov/deermetrics/LaunchPage.aspx
+
+Installation Guide:
+    If a user wants to run the PDF Parser, they first must install the required
+    dependencies. Guide for this is located in the **doc** folder called **developer.md** 
+    Any further installations will be handled by the **environment.yml** file. 
