@@ -1,4 +1,4 @@
-### How to Install PDF Parser Dependencies
+# How to Install PDF Parser Dependencies
 
 ## Introduction
 There are a few specific dependies required (based on user OS) to use our PDF Parser. 
@@ -25,6 +25,8 @@ In python run the code `import tkinter`
 
 ## Extra Information
 [Camelot Documentation](https://camelot-py.readthedocs.io/en/master/user/install.html)
+
 [Tkinter Documentation](https://wiki.python.org/moin/TkInter)
+
 [Ghostscript Documentation](https://www.ghostscript.com/) 
 
