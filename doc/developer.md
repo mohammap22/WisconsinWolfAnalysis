@@ -1,4 +1,4 @@
-### How to Install PDF Parser Dependenies
+### How to Install PDF Parser Dependencies
 
 ## Introduction
 There are a few specific dependies required (based on user OS) to use our PDF Parser. 
