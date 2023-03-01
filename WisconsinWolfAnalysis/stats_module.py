@@ -1,6 +1,6 @@
 """PROGRAM DOCSTRING GOES HERE"""
 
-from scipy.stats import pearsonr
+from scipy.stats import pearsonr, linregress
 from pathlib import Path
 import pandas as pd
 
@@ -58,16 +58,46 @@ def hypothesis_function_one():
     x = df.iloc[:,1]
     y = df.iloc[:,2]
 
-    print("The program will now fit a simple linear regression,"
-          " and calculate the Pearson Correlation Coefficient")
+    print("The program will perform a simple linear regression"
+          " with a two-sided alternate hypothesis"
+          " and calculate the Pearson Correlation Coefficient.")
     
+    #Linear regression
+    linear_regression = linregress(x, y, alternative="two-sided")
+    intercept = linear_regression[0]
+    slope = linear_regression[1]
+    r_value = linear_regression[2]
+    slope_pvalue = linear_regression[3]
+    if slope_pvalue >= 0.05:
+        print("Using a 0.05 level of statistical significance we FAIL"
+              " TO REJECT the null hypothesis that there is no linear "
+              "relationship between the independent and dependent "
+              "populations.\n"
+              "WARNING: Linear regression model is not a good fit for"
+              "this data")
+    elif slope_pvalue < 0.05:
+        print("Using a 0.05 level of statistical significance we"
+              " REJECT the null hypothesis that there is no linear "
+              "relationship between the independent and dependent "
+              "populations.")
+
     #Correlation
-    corr_coeff = round(pearsonr(x, y)[0],4)
-    p_value = pearsonr(x, y)[1]
+    pearson_results = pearsonr(x,y)
+    corr_coeff = round(pearson_results[0],4)
+    p_value = pearson_results[1]
+    if p_value >= 0.05:
+        print("Using a 0.05 level of statistical significance we FAIL"
+              " TO REJECT the null hypothesis that there is no "
+              "correlation between the independent and dependent "
+              "populations")
+    elif p_value < 0.05:
+        print("Using a 0.05 level of statistical significance we "
+              "REJECT the null hypothesis that there is no "
+              "correlation between the independent and dependent "
+              "populations\n"
+              "REMEMBER: Correlation *does not* imply causation")
     print(f"Correlation coefficient: {corr_coeff}")
     print(f"p-value: {p_value}")
-
-    #Linear regression
 
     return corr_coeff, p_value
 
