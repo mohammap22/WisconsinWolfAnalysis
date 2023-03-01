@@ -82,6 +82,6 @@ def pdf_parser(pdf_files_list, pdf_folder):
                           "BadData", f"table_{i+1}.csv"), index=False)
 
 
-pdf_list = glob.glob('pdf/*.pdf')
+#pdf_list = glob.glob('pdf/*.pdf')
 
-pdf_parser(pdf_list, 'pdf')
+#pdf_parser(pdf_list, 'pdf')
