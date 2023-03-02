@@ -4,7 +4,7 @@ from scipy.stats import pearsonr, linregress
 from pathlib import Path
 import pandas as pd
 
-def hypothesis_function_one():
+def hypothesis_function_one(filepath = ):
     """ 
     This function will calculate the correlation between two variables
     or populations over time
