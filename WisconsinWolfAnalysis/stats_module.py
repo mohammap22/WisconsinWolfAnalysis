@@ -1,20 +1,22 @@
 """PROGRAM DOCSTRING GOES HERE"""
 
 from scipy.stats import pearsonr, linregress
-from pathlib import Path
 import pandas as pd
+from pandas.api.types import is_numeric_dtype
 
-def hypothesis_function_one():
+
+def hypothesis_function_one(filepath):
     """ 
-    This function will calculate the correlation between two variables
-    or populations over time
+    This function will calculate the correlation between two
+    populations over time
     ---------------------------Arguments-------------------------------
-    none
+    filepath: string
+        Filepath to csv file for correlation analysis
     --------------------------Return Values----------------------------
     corr_coeff: numeric
-        Description goes here
+        Pearson R correlation coefficient calculated via Scipy
     p_value: numeric
-        Description goes here
+        p-value of the Pearson R correlation
     -----------------------------Side Effects--------------------------
     User query: Asks the user for a csv file containing 3 columns.
         The first column can be any format, but second two need to be
@@ -22,84 +24,60 @@ def hypothesis_function_one():
     ------------------------------Exceptions---------------------------
     TypeError raised if:
         The input file isn't a csv, doesn't have 3 columns,
-        the final two columns aren't numeric type, or there are fewer
-        than 2 rows in the data frame
+        the final two columns aren't numeric type, there are fewer
+        than 2 rows in the data frame, there are null values
     """
-    #Ask_path sub-function handles and tests the user input
-    '''def ask_path(question, allowed_extension):
-        file = Path(input(question))
-        if file.exists() and file.is_file and file.suffix in allowed_extension:
-            return file
-        else:
-            raise TypeError("Please ensure file exists and ends in '.csv'")            
-    prompt = ("Correlation test: Please enter the relative filepath for"
-              " a csv with 3 data columns.\n"
-              "The second and third columns should contain numeric "
-              "information on the independent and dependent "
-              "populations, respectively.\n"
-              "The first column can be any value(s) you choose "
-              "e.g., a year or geographic region corresponding "
-              "to the samples\n"
-              "Filepath: ")
-    file = ask_path(prompt, [".csv"])'''
-    
-    file = "./pdf/test_files/wolf_and_deer_pop.csv"
 
     #Putting the file into pandas and testing
-    df = pd.read_csv(file)
-    if len(df.columns) != 3:
+    if filepath[-4:] != '.csv':
+        raise TypeError('File must be a csv')
+    correlation_df = pd.read_csv(filepath)
+    if len(correlation_df.columns) != 3:
         raise TypeError("CSV file must have exactly 3 columns")
-    '''if df.iloc[:,[1,2]].dtypes not in ['int','float', 'complex']:
+    if (not is_numeric_dtype(correlation_df.iloc[:,1]) or
+        not is_numeric_dtype(correlation_df.iloc[:,2])):
         raise TypeError("Data in 2nd and 3rd column must be numeric")
-    if len(df) < 2:
+    if len(correlation_df) < 2:
         raise TypeError("Data must have at least 2 samples (rows)")
-    if df.isnull().values.any():
-        raise ValueError("Data may not have any null values")'''
+    if correlation_df.isnull().values.any():
+        raise ValueError("Data may not have any null values")
 
-    x = df.iloc[:,1]
-    y = df.iloc[:,2]
+    x_var = correlation_df.iloc[:,1]
+    y_var = correlation_df.iloc[:,2]
 
-    print("The program will perform a simple linear regression"
-          " with a two-sided alternate hypothesis"
-          " and calculate the Pearson Correlation Coefficient.")
-    
+    print("\nCORRELATION HYPOTHESIS TEST (1):\n"
+          "\nThe program will perform a simple linear regression and "
+          "calculate \nthe Pearson Correlation Coefficient for the "
+          "independent and dependent populations.\n"
+          "All tests use 0.05 level of significance and two-sided"
+           " hypothesis tests.\n\n"
+           "-------------------------RESULTS-------------------------"
+           "\n")
+
     #Linear regression
-    linear_regression = linregress(x, y, alternative="two-sided")
+    linear_regression = linregress(x_var, y_var, alternative="two-sided")
     intercept = linear_regression[0]
     slope = linear_regression[1]
-    r_value = linear_regression[2]
     slope_pvalue = linear_regression[3]
     if slope_pvalue >= 0.05:
-        print("Using a 0.05 level of statistical significance we FAIL"
-              " TO REJECT the null hypothesis that there is no linear "
-              "relationship between the independent and dependent "
-              "populations.\n"
+        print("FAIL TO REJECT null hypothesis of no linear relationship\n"
               "WARNING: Linear regression model is not a good fit for"
-              "this data")
+              "this data\n")
     elif slope_pvalue < 0.05:
-        print("Using a 0.05 level of statistical significance we"
-              " REJECT the null hypothesis that there is no linear "
-              "relationship between the independent and dependent "
-              "populations.")
+        print("REJECT null hypothesis of no linear relationship\n")
 
     #Correlation
-    pearson_results = pearsonr(x,y)
+    pearson_results = pearsonr(x_var,y_var)
     corr_coeff = round(pearson_results[0],4)
     p_value = pearson_results[1]
     if p_value >= 0.05:
-        print("Using a 0.05 level of statistical significance we FAIL"
-              " TO REJECT the null hypothesis that there is no "
-              "correlation between the independent and dependent "
-              "populations")
+        print("FAIL TO REJECT null hypothesis of no correlation")
     elif p_value < 0.05:
-        print("Using a 0.05 level of statistical significance we "
-              "REJECT the null hypothesis that there is no "
-              "correlation between the independent and dependent "
-              "populations\n"
-              "REMEMBER: Correlation *does not* imply causation")
+        print("REJECT null hypothesis of no correlation")
     print(f"Correlation coefficient: {corr_coeff}")
-    print(f"p-value: {p_value}")
-
+    print(f"p-value: {p_value}\n")
+    print("---------------------------------------------------------"
+           "\n")
     return corr_coeff, p_value
 
 
@@ -111,6 +89,3 @@ def hypothesis_function_two():
 def hypothesis_function_three():
     """MODULE DOCSTRING GOES HERE"""
     return "Nothing written yet"
-
-'''testing'''
-hypothesis_function_one()

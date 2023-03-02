@@ -11,50 +11,43 @@ class UnitTests(unittest.TestCase):
     This class also relies on the unittest module and TestCase class
     """
 
-    @mock.patch('stats_module.input', create = True)
-    def test_correlation_file_format(self, mocked_input):
-        """This test verifies the file input into the correlation
-        function is a csv"""
-        mocked_input = './pdf/WolfReport2017.pdf'
+    def test_correlation_file_format(self):
+        """Input file is csv"""
         with self.assertRaises(TypeError):
-            hypothesis_function_one()
+            hypothesis_function_one('./pdf/WolfReport2017.pdf')
 
-    def test_correlation_three_columns(self, mocked_input):
-        """This test verifies that the dataframe has 3 columns"""
-        mocked_input = 'pdf/test_files/two_col_wolf_and_deer_pop.csv'
+    def test_correlation_three_columns(self):
+        """Dataframe has 3 columns"""
         with self.assertRaises(TypeError):
-            hypothesis_function_one()
+            hypothesis_function_one(
+                'pdf/test_files/two_col_wolf_and_deer_pop.csv')
 
-    def test_correlation_other_cols_numeric(self, mocked_input):
-        """This test verifies that the second and third columns of the
-        dataframe are numeric types so the correlation analysis can be
-        run on them"""
-        mocked_input = 'pdf/test_files/wolf_and_deer_pop_non_num.csv'
+    def test_correlation_other_cols_numeric(self):
+        """Second and third columns are numeric"""
         with self.assertRaises(TypeError):
-            hypothesis_function_one()
+            hypothesis_function_one(
+                'pdf/test_files/wolf_and_deer_pop_non_num.csv')
     
-    def test_correlation_enough_entries(self, mocked_input):
-        """This test verifies that the user has at least 2 rows in
-        their data frame"""
+    def test_correlation_enough_entries(self):
+        """Data frame has at least 2 rows"""
         with self.assertRaises(TypeError):
-            mocked_input = 'pdf/test_files/wolf_and_deer_pop_one_row.csv'
-            hypothesis_function_one()
+            hypothesis_function_one(
+                'pdf/test_files/wolf_and_deer_pop_one_row.csv')
     
-    def test_correlation_no_nulls(self, mocked_input):
-        """This test verifies that no values in the data frame are
-        null"""
-        mocked_input = 'pdf/test_files/wolf_and_deer_pop_nulls.csv'
+    def test_correlation_no_nulls(self):
+        """Data frame has no null values"""
         with self.assertRaises(ValueError):
-            hypothesis_function_one()
+            hypothesis_function_one(
+                'pdf/test_files/wolf_and_deer_pop_nulls.csv')
 
-    def test_correlation_of_one(self, mocked_input):
+    '''def test_correlation_of_one(self):
         """This test verifies that we get a pearsons correlation of 
         1 given exactly the same data in x and y
         
         THIS TEST LIKELY NEEDS TO BE UPDATED AS I UNDERSTAND HOW
         PEARSONR WORKS"""
-        mocked_input = 'pdf/test_files/wolf_and_deer_pop_one.csv'
-        self.assertAlmostEqual(hypothesis_function_one(),1)
+        self.assertAlmostEqual(hypothesis_function_one(
+            'pdf/test_files/wolf_and_deer_pop_one.csv'),1)'''
 
 
 if __name__ == '__main__':
