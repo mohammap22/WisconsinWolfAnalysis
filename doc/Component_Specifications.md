@@ -146,7 +146,14 @@ The software components detailed below interact to allow a user interested in an
             ** The function outputs a graph of the population(s) over time fitted with trendline(s) and titles, giving the user the option to save the visualization
         
         * Hypothesis function 3: Comparing two proportions
-            ** INSERT DESCRIPTION HERE
+            ** The function asks the user for a dataframe with at least 3 columns - the first must be a datetime, the second must be the total number of observations, and the third+ be the number of observations with a specific characteristic of interest 
+            ** The function validates the dataframe and outputs an error message if necessary
+            ** If no error in the dataframe format/content the function will:
+                *** Notify the user that it will perform one or more hypothesis tests and state them in terms of the columns provided. It will also state that it will run a 2-sample Z test for proportions with a 0.05 significance level to make inferences about the hypotheses
+                *** Notify the user of the two values in the datetime column of the provided dataframe that will be used for the 2 samples
+            The function outputs:
+                *** The test statistic, p-value, and whether or not the null hypothesis was rejected, for each of the 2-sample proportion tests performed
+                *** A line chart showing the change in the third+ columns over time
 
     - Assumptions:
         * Data necessary to answer questions has been combined across separate PDFs/tables into single dataframes
