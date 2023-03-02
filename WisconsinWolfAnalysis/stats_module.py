@@ -1,17 +1,17 @@
 """PROGRAM DOCSTRING GOES HERE"""
 
 from scipy.stats import pearsonr, linregress
-from pathlib import Path
 import pandas as pd
 from pandas.api.types import is_numeric_dtype
 
 
 def hypothesis_function_one(filepath):
     """ 
-    This function will calculate the correlation between two variables
-    or populations over time
+    This function will calculate the correlation between two
+    populations over time
     ---------------------------Arguments-------------------------------
-    none
+    filepath: string
+        Filepath to csv file for correlation analysis
     --------------------------Return Values----------------------------
     corr_coeff: numeric
         Pearson R correlation coefficient calculated via Scipy
@@ -31,19 +31,19 @@ def hypothesis_function_one(filepath):
     #Putting the file into pandas and testing
     if filepath[-4:] != '.csv':
         raise TypeError('File must be a csv')
-    df = pd.read_csv(filepath)
-    if len(df.columns) != 3:
+    correlation_df = pd.read_csv(filepath)
+    if len(correlation_df.columns) != 3:
         raise TypeError("CSV file must have exactly 3 columns")
-    if (not is_numeric_dtype(df.iloc[:,1]) or  
-        not is_numeric_dtype(df.iloc[:,2])):
+    if (not is_numeric_dtype(correlation_df.iloc[:,1]) or
+        not is_numeric_dtype(correlation_df.iloc[:,2])):
         raise TypeError("Data in 2nd and 3rd column must be numeric")
-    if len(df) < 2:
+    if len(correlation_df) < 2:
         raise TypeError("Data must have at least 2 samples (rows)")
-    if df.isnull().values.any():
+    if correlation_df.isnull().values.any():
         raise ValueError("Data may not have any null values")
 
-    x = df.iloc[:,1]
-    y = df.iloc[:,2]
+    x_var = correlation_df.iloc[:,1]
+    y_var = correlation_df.iloc[:,2]
 
     print("\nCORRELATION HYPOTHESIS TEST (1):\n"
           "\nThe program will perform a simple linear regression and "
@@ -53,12 +53,11 @@ def hypothesis_function_one(filepath):
            " hypothesis tests.\n\n"
            "-------------------------RESULTS-------------------------"
            "\n")
-    
+
     #Linear regression
-    linear_regression = linregress(x, y, alternative="two-sided")
+    linear_regression = linregress(x_var, y_var, alternative="two-sided")
     intercept = linear_regression[0]
     slope = linear_regression[1]
-    r_value = linear_regression[2]
     slope_pvalue = linear_regression[3]
     if slope_pvalue >= 0.05:
         print("FAIL TO REJECT null hypothesis of no linear relationship\n"
@@ -68,7 +67,7 @@ def hypothesis_function_one(filepath):
         print("REJECT null hypothesis of no linear relationship\n")
 
     #Correlation
-    pearson_results = pearsonr(x,y)
+    pearson_results = pearsonr(x_var,y_var)
     corr_coeff = round(pearson_results[0],4)
     p_value = pearson_results[1]
     if p_value >= 0.05:
@@ -90,6 +89,3 @@ def hypothesis_function_two():
 def hypothesis_function_three():
     """MODULE DOCSTRING GOES HERE"""
     return "Nothing written yet"
-
-'''testing'''
-#hypothesis_function_one("./pdf/test_files/wolf_and_deer_pop.csv")
