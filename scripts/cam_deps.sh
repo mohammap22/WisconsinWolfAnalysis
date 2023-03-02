@@ -1,7 +1,7 @@
 #!/bin/bash
 
-apt-get update
+sudo apt-get update
 
-apt-get install -y ghostscript python3-tk 
+sudo apt-get install -y ghostscript python3-tk 
 
 
