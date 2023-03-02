@@ -1,0 +1,16 @@
+name: wolf_env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - camelot-py=0.10.1
+  - debugpy=1.5.1
+  - opencv=4.6.0
+  - pandas=1.5.2
+  - pip=22.3.1
+  - pylint=2.16.2
+  - python=3.9.16
+  - scipy=1.10.0
+  - seaborn=0.12.2
+  - yaml=0.2.5
+prefix: C:\Users\kltor\anaconda3\envs\wolf_env
