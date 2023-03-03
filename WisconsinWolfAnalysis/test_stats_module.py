@@ -1,8 +1,8 @@
 """MODULE DOCSTRING GOES HERE"""
 
 import unittest
-from unittest import mock
-from stats_module import hypothesis_function_one
+#from unittest import mock
+from stats_module import *
 
 class UnitTests(unittest.TestCase):
     """
@@ -49,6 +49,44 @@ class UnitTests(unittest.TestCase):
         self.assertAlmostEqual(hypothesis_function_one(
             'pdf/test_files/wolf_and_deer_pop_one.csv'),1)'''
 
+    #Logan's Stuff:
+    #-----IO---------
+    def test_proportion_file_format(self):
+        """Input file is csv"""
+        with self.assertRaises(TypeError):
+            hypothesis_function_three('./pdf/WolfReport2017.pdf')
+    
+    def test_proportion_other_cols_numeric(self):
+        """Columns are numeric"""
+        with self.assertRaises(TypeError):
+            hypothesis_function_three(
+                'pdf/test_files/prop_of_wolves_non_numeric.csv')
+    
+    def test_proportion_enough_entries(self):
+        """DataFrame has at least 2 rows"""
+        with self.assertRaises(ValueError):
+            hypothesis_function_three(
+                'pdf/test_files/prop_of_wolves_one_row.csv')
+    
+    def test_proportion_enough_cols(self):
+        """DataFrame has at least 3 columns"""
+        with self.assertRaises(ValueError):
+            hypothesis_function_three('prop_of_wolves_two_col.csv')
+    
+    def test_proportion_no_nulls(self):
+        """DataFrame has no null values"""
+        with self.assertRaises(ValueError):
+            hypothesis_function_three(
+                'pdf/test_files/prop_of_wolves_nulls.csv')
+    
+    #------- Stats --------
+    #That the total # obs in a row is always >= cells in other cols
+    def test_proportion_total_at_least_observed(self):
+        """The 2nd (total observations) is >= corresponding observed with
+        characteristic of interest"""
+        with self.assertRaises(ValueError):
+            hypothesis_function_three('prop_of_wolves_pop_issue.csv')
+    
 
 if __name__ == '__main__':
     unittest.main()
