@@ -2,7 +2,10 @@
 
 import unittest
 #from unittest import mock
-from stats_module import *
+from stats_module import (hypothesis_function_one,
+                          hypothesis_function_two,
+                          hypothesis_function_three)
+
 
 class UnitTests(unittest.TestCase):
     """
@@ -27,13 +30,13 @@ class UnitTests(unittest.TestCase):
         with self.assertRaises(TypeError):
             hypothesis_function_one(
                 'pdf/test_files/wolf_and_deer_pop_non_num.csv')
-    
+
     def test_correlation_enough_entries(self):
         """Data frame has at least 2 rows"""
         with self.assertRaises(TypeError):
             hypothesis_function_one(
                 'pdf/test_files/wolf_and_deer_pop_one_row.csv')
-    
+
     def test_correlation_no_nulls(self):
         """Data frame has no null values"""
         with self.assertRaises(ValueError):
@@ -43,11 +46,35 @@ class UnitTests(unittest.TestCase):
     '''def test_correlation_of_one(self):
         """This test verifies that we get a pearsons correlation of 
         1 given exactly the same data in x and y
-        
         THIS TEST LIKELY NEEDS TO BE UPDATED AS I UNDERSTAND HOW
         PEARSONR WORKS"""
         self.assertAlmostEqual(hypothesis_function_one(
             'pdf/test_files/wolf_and_deer_pop_one.csv'),1)'''
+
+
+    def test_graph_csv(self):
+        """Input file is csv"""
+        with self.assertRaises(TypeError):
+            hypothesis_function_two(
+                'pdf/test_files/WolfReport2017.pdf')
+
+    def test_graph_min_two_cols(self):
+        """Dataframe has at least 2 columns"""
+        with self.assertRaises(TypeError):
+            hypothesis_function_two(
+                'pdf/test_files/one_col_wolf_and_deer_pop.csv')
+
+    def test_graph_cols_numeric(self):
+        """All columns numeric types"""
+        with self.assertRaises(TypeError):
+            hypothesis_function_two(
+                'pdf/test_files/wolf_and_deer_pop_non_num.csv')
+
+    def test_graph_no_nulls(self):
+        """Data frame has no null values"""
+        with self.assertRaises(ValueError):
+            hypothesis_function_two(
+                'pdf/test_files/wolf_and_deer_pop_nulls.csv')
 
     #Logan's Stuff:
     #-----IO---------
@@ -87,6 +114,5 @@ class UnitTests(unittest.TestCase):
     #     with self.assertRaises(ValueError):
     #         hypothesis_function_three('prop_of_wolves_pop_issue.csv')
     
-
 if __name__ == '__main__':
     unittest.main()
