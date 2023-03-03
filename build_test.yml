@@ -61,7 +61,7 @@ jobs:
         uses: conda-incubator/setup-miniconda@v2
         with:
           # Use the environment name from your environment.yml file
-          activate-environment: ci_example
+          activate-environment: wolf_env
           # The name of the environment file you want conda to use
           environment-file: environment.yml
           # Whether you want conda to automatically update the conda
@@ -87,11 +87,12 @@ jobs:
       
       # If there are any other steps in order for your tests to
       # run successfully, you can add those steps here!
+      # EC: ADD BASH SCRIPT HERE???
 
       # Next step: run pylint. Anything less than 10/10 will fail.
       - name: Lint with pylint
         run: |
-          pylint entropy/**/*.py
+          pylint WisconsinWolfAnalysis/*.py
       # Next step: run the unit tests with code coverage.
       - name: Unit tests
         run: |
