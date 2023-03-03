@@ -1,48 +1,74 @@
+"""
+unittest for testing
+os to create and remove files
+shuttil to remove file trees
+pdf_parser is function being tested
+"""
 import unittest
 import os
 import shutil
 from pdf_parser import pdf_parser
 
-
 class TestPdfParser(unittest.TestCase):
     """Test suite for pdf_parser function"""
-    
-    def test_file_creation(self):
+
+    @classmethod
+    def setUpClass(cls):
+        """Set up pdf parser and data"""
+        cls.pdf_files_list = ["pdf/Wisconsin_Gray_Wolf_Report_2022.pdf"]
+        pdf_parser(cls.pdf_files_list,".")
+
+    @classmethod
+    def tearDownClass(cls):
+        """Clean up test data"""
+        shutil.rmtree("Wisconsin_Gray_Wolf_Report_2022")
+
+    def test_directory_creation(self):
         """
         Given a list with one PDF file
         When pdf_parser is called
-        Then it should create one file with three subfolders:
-        GoodData, BadData, and MergedData
-        each folder should contain at least one csv 
-        no other file type should exist 
+        Then it should create one directory with the same name as the PDF file
         """
-        pdf_files_list = ["pdf/Wisconsin_Gray_Wolf_Report_2022.pdf"]
-        pdf_parser(pdf_files_list,".")
-
-        # Assert that the file and directories were created as expected
         self.assertTrue(os.path.exists("Wisconsin_Gray_Wolf_Report_2022"))
+
+    def test_good_data_creation(self):
+        """
+        Given a list with one PDF file
+        When pdf_parser is called
+        Then it should create a subdirectory "GoodData" in the directory
+        And the subdirectory should contain at least one CSV file
+        """
         self.assertTrue(os.path.exists("Wisconsin_Gray_Wolf_Report_2022/GoodData"))
-        self.assertTrue(os.path.exists("Wisconsin_Gray_Wolf_Report_2022/BadData"))
-        self.assertTrue(os.path.exists("Wisconsin_Gray_Wolf_Report_2022/Merged_Data"))
-
-        # Assert that the subfolders contain CSV files
         good_data_files = os.listdir("Wisconsin_Gray_Wolf_Report_2022/GoodData")
-        bad_data_files = os.listdir("Wisconsin_Gray_Wolf_Report_2022/BadData")
-        merged_data_files = os.listdir("Wisconsin_Gray_Wolf_Report_2022/Merged_Data")
         self.assertTrue(len(good_data_files) >= 1)
-        self.assertTrue(len(bad_data_files) >= 1)
-        self.assertTrue(len(merged_data_files) >= 1)
-
-        # Assert that there are no files other than CSV files in the subfolders
         for file in good_data_files:
             self.assertTrue(file.endswith(".csv"))
+
+    def test_bad_data_creation(self):
+        """
+        Given a list with one PDF file
+        When pdf_parser is called
+        Then it should create a subdirectory "BadData" in the directory
+        And the subdirectory should contain at least one CSV file
+        """
+        self.assertTrue(os.path.exists("Wisconsin_Gray_Wolf_Report_2022/BadData"))
+        bad_data_files = os.listdir("Wisconsin_Gray_Wolf_Report_2022/BadData")
+        self.assertTrue(len(bad_data_files) >= 1)
         for file in bad_data_files:
             self.assertTrue(file.endswith(".csv"))
+
+    def test_merged_data_creation(self):
+        """
+        Given a list with one PDF file
+        When pdf_parser is called
+        Then it should create a subdirectory "MergedData" in the directory
+        And the subdirectory should contain at least one CSV file
+        """
+        self.assertTrue(os.path.exists("Wisconsin_Gray_Wolf_Report_2022/Merged_Data"))
+        merged_data_files = os.listdir("Wisconsin_Gray_Wolf_Report_2022/Merged_Data")
+        self.assertTrue(len(merged_data_files) >= 1)
         for file in merged_data_files:
             self.assertTrue(file.endswith(".csv"))
-        
-        #Delete file tree
-        shutil.rmtree("Wisconsin_Gray_Wolf_Report_2022")
 
 if __name__ == '__main__':
     unittest.main()
