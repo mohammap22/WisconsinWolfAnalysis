@@ -86,7 +86,7 @@ def hypothesis_function_two():
     return "Nothing written yet"
 
 
-def hypothesis_function_three():
+def hypothesis_function_three(filepath):
     """MODULE DOCSTRING GOES HERE"""
     return "Nothing written yet"
 
