@@ -41,7 +41,7 @@ def wrapper():
         
             #A good test file: ./pdf/wolf_and_deer_pop.csv
             output = hypothesis_function_two(filepath)
-            print(output)
+            #print(output)
             
         elif option == '3':
             filepath = input("You have selected option 3: Comparing two "
