@@ -43,14 +43,12 @@ class UnitTests(unittest.TestCase):
             hypothesis_function_one(
                 'pdf/test_files/wolf_and_deer_pop_nulls.csv')
 
-    '''def test_correlation_of_one(self):
+    def test_correlation_of_one(self):
         """This test verifies that we get a pearsons correlation of 
-        1 given exactly the same data in x and y
-        THIS TEST LIKELY NEEDS TO BE UPDATED AS I UNDERSTAND HOW
-        PEARSONR WORKS"""
+        1 given exactly the same data in x and y"""
         self.assertAlmostEqual(hypothesis_function_one(
-            'pdf/test_files/wolf_and_deer_pop_one.csv'),1)'''
-
+            './pdf/test_files/wolf_and_deer_pop_perf_corr.csv'),
+            (1.0, 0.0))
 
     def test_graph_csv(self):
         """Input file is csv"""

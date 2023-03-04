@@ -56,11 +56,11 @@ def hypothesis_function_one(filepath):
 
     #Linear regression
     linear_regression = linregress(x_var, y_var, alternative="two-sided")
-    intercept = linear_regression[0]
-    slope = linear_regression[1]
+    intercept = linear_regression[1]
+    slope = linear_regression[0]
     slope_pvalue = linear_regression[3]
     if slope_pvalue >= 0.05:
-        print("FAIL TO REJECT null hypothesis of no linear relationship\n"
+        print("F.95AIL TO REJECT null hypothesis of no linear relationship\n"
               "WARNING: Linear regression model is not a good fit for"
               "this data\n")
     elif slope_pvalue < 0.05:
@@ -78,6 +78,18 @@ def hypothesis_function_one(filepath):
     print(f"p-value: {p_value}\n")
     print("---------------------------------------------------------"
            "\n")
+
+    #Graphing the line of best fit and the data
+    graph = sns.scatterplot(x = x_var, y = y_var)
+    line_of_best_fit = []
+    for i in range(len(x_var)):
+        line_of_best_fit.append(intercept + slope*x_var[i])
+    plt.plot(x_var, line_of_best_fit, color = 'orange')
+    plot_label = (f"Line of best fit:\n y ="
+                    f"{round(intercept,2)} + {round(slope,2)}*x")
+    plt.text(0.02, 0.9, s = plot_label, transform=plt.gca().transAxes,
+             bbox = {"edgecolor": 'black', "facecolor": 'white'})
+    plt.show()
     return corr_coeff, p_value
 
 def hypothesis_function_two(filepath):
