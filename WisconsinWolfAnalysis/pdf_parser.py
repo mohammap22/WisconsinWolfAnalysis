@@ -37,17 +37,23 @@ def pdf_parser(pdf_files_list, pdf_folder):
         merged_data_dir = os.path.join(pdf_folder, directory_name,
                                        "Merged_Data")
         os.makedirs(merged_data_dir, exist_ok=True)
-        tables = camelot.read_pdf(file_location, pages='all')
-        # ,split_text = True)
+        tables = camelot.read_pdf(file_location,pages = "all",flavor='stream' ,edge_tol = 500)
 
         for i, table in enumerate(tables):
-            df = table.df
-            # df = df.iloc[1:]
-            # try:
-            #      df.columns = df.iloc[0]
-            #      df = df[1:]
-            #  except:
-            #      pass
+            df = table.df.applymap(is_sentence)
+
+            non_empty_row_idx = 0
+            for row_idx, row in enumerate(df.values):
+                if not all(cell == '' for cell in row):
+                    non_empty_row_idx = row_idx
+                    break
+            column_names = df.iloc[non_empty_row_idx]
+            df = df.iloc[non_empty_row_idx+1:].reset_index(drop=True)
+            df.columns = column_names
+
+            non_null_cols = df.columns[df.notnull().any()].tolist()
+            file_name = '_'.join(non_null_cols)
+
             has_useful_values = False
             for column in df.columns:
                 column_values = df[column].values
@@ -68,7 +74,7 @@ def pdf_parser(pdf_files_list, pdf_folder):
                         # Save the dataframe as a CSV file
                         # in the "GoodData" directory
                         df.to_csv(os.path.join(pdf_folder, directory_name,
-                                  "GoodData", f"table_{i+1}.csv"),
+                                  "GoodData", file_name + str(i) + '.csv'),
                                   index=False)
                     else:
                         merged_df = pd.concat(dfs, ignore_index=True)
@@ -79,8 +85,15 @@ def pdf_parser(pdf_files_list, pdf_folder):
                 # Save the dataframe as a CSV file in the "BadData"
                 # directory
                 df.to_csv(os.path.join(pdf_folder, directory_name,
-                          "BadData", f"table_{i+1}.csv"), index=False)
+                          "BadData", file_name + str(i) + '.csv'), index=False)
 
+def is_sentence(cell):
+    if isinstance(cell, str) and cell.endswith('.'):
+        return ''
+    if isinstance(cell, str) and len(cell) > 50:
+        return ''
+    else:
+        return cell
 
 #pdf_list = glob.glob('pdf/*.pdf')
 

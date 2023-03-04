@@ -11,13 +11,13 @@ This is so the installation of ghostscript and tkinter goes smoothly.
 
 ## For Ubuntu Users
 Run the command:
-`apt install ghostscript python3-tk`
+`sudo apt install ghostscript python3-tk`
 
 This command installs both ghostscript and tkinter. 
 
 ## For Mac Users
 Run the command:
-`brew install ghostscript tcl-tk`
+`sudo brew install ghostscript tcl-tk`
 
 ## After Installation
 One needs to import tkinter before running anything in camelot. 
