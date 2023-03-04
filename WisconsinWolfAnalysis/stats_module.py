@@ -81,13 +81,13 @@ def hypothesis_function_one(filepath):
     return corr_coeff, p_value
 
 
-def hypothesis_function_two():
+def hypothesis_function_two(filepath):
     """MODULE DOCSTRING GOES HERE"""
-    return "Nothing written yet"
+    return "Nothing written yet\n"
 
 
 def hypothesis_function_three(filepath):
     """MODULE DOCSTRING GOES HERE"""
-    return "Nothing written yet"
+    return "Nothing written yet\n"
 
-hypothesis_function_one('./pdf/test_files/wolf_and_deer_pop.csv')
+#hypothesis_function_one('./pdf/test_files/wolf_and_deer_pop.csv')
