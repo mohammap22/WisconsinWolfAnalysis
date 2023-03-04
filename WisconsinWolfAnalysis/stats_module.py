@@ -107,7 +107,7 @@ def hypothesis_function_two(filepath):
             raise TypeError("Data must be numeric")
     if graph_df.isnull().values.any():
         raise ValueError("Data may not have any null values")
-
+    
     #Creating the graphs using Seaborn
     x_var = graph_df.columns[0]
     graph_df_melted = graph_df.melt(x_var, var_name="Populations",
@@ -116,6 +116,9 @@ def hypothesis_function_two(filepath):
                  hue = "Populations")
     plt.show()
 
+
 def hypothesis_function_three(filepath):
     """MODULE DOCSTRING GOES HERE"""
-    return "Nothing written yet"
+    return "Nothing written yet\n"
+
+#hypothesis_function_one('./pdf/test_files/wolf_and_deer_pop.csv')
