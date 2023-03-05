@@ -143,10 +143,6 @@ def hypothesis_function_three(filepath):
            "-------------------------RESULTS-------------------------"
            "\n")
     
-    #Conduct Tests
-    #import scipy.stats.distributions as dist
-    #pvalue = 2*dist.norm.cdf(-np.abs(test_stat))
-    
     #Grab years
     time1 = df[df.columns[0]][0]
     time2 = df[df.columns[0]][len(df.axes[0]) - 1]
@@ -158,14 +154,6 @@ def hypothesis_function_three(filepath):
     
     #drop first 2 columns
     df_dropped = df.drop(columns=df.columns[0:2], axis=1, inplace=False)
-    
-    #Get counts for rows of interest (first and last) //sucesses
-    # char_counts1 = df_dropped.iloc[0].tolist()
-    # char_counts2 = df_dropped.iloc[len(df.axes[0] - 1)].tolist()
-    
-    #Make lists of total observation counts
-    # total_obs1_ls = [total_obs1] * len(char_counts1)
-    # total_obs2_ls = [total_obs2] * len(char_counts2)
     
     #for each column in dropped df
     for (col_name, col_data) in df_dropped.iteritems():
@@ -201,5 +189,61 @@ def hypothesis_function_three(filepath):
         
     
     print("------------------------------------------------------------------")
+    
+    #--------------------Plot the data------------------------------------
+    
+    pop_counts = df.iloc[:,1]
+    mydatetime = df.iloc[:,0]
+    
+    #Drop first 2 cols
+    df_dropped = df.drop(columns=df.columns[0:2], axis=1, inplace=False)
+
+    #Create a dataFrame with proportions instead of counts
+    new_rows = []
+    for index, row in df_dropped.iterrows():
+        temp_row = row.copy()
+        
+        #create proportions
+        for i in range(len(row)):
+            temp_row[i] = row[i] / pop_counts[index]
+            
+        new_rows.append(temp_row)
+    df_prop_no_year = pd.DataFrame(new_rows)
+
+    #add back in year
+    df_prop = df_prop_no_year
+    df_prop["datetime"] = mydatetime
+    
+    #Graph the data
+    x_var = df_prop.columns[len(df_prop.axes[1]) - 1]
+    df_prop_melted = pd.melt(frame=df_prop, id_vars=["datetime"], 
+                             var_name="Categories", value_name="Proportions")
+    sns.lineplot(data = df_prop_melted, x = x_var, y = "Proportions",
+                 hue = "Categories")
+    plt.show()
+    
+    
+    
+    # df_no_pop = df.drop(columns=df.columns[1], axis=1, inplace=False)
+    # x_var = df_no_pop.columns[0]
+    # df_no_pop_melted = df.melt(x_var, var_name="Categories",
+    #                            value_name="Counts")
+    
+    # #for index, row in df_dropped.iterrows():
+    # for i in range(len(df_dropped.axes[0])):
+    #     #temp_row = row.copy()
+    #     temp_row = df_dropped
+        
+    #     #iterate through the cols and create proportions
+    #     for j in range(len(row)):
+    #         temp_row[j] = row[j] / df.iloc[1]
+    
+    # #Creating the graphs using Seaborn
+    # x_var = df.columns[0]
+    # df_melted = df.melt(x_var, var_name="Populations",
+    #                                 value_name="Proportions")
+    # sns.lineplot(data = df_melted, x = x_var, y = "Proportions",
+    #              hue = "Populations")
+    # plt.show()
 
 #hypothesis_function_one('./pdf/test_files/wolf_and_deer_pop.csv')
