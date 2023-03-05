@@ -1,7 +1,9 @@
 """PROGRAM DOCSTRING GOES HERE"""
 
 from scipy.stats import pearsonr, linregress
+from statsmodels.stats.proportion import proportions_ztest
 import pandas as pd
+import numpy as np
 from pandas.api.types import is_numeric_dtype
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -131,6 +133,129 @@ def hypothesis_function_two(filepath):
 
 def hypothesis_function_three(filepath):
     """MODULE DOCSTRING GOES HERE"""
-    return "Nothing written yet\n"
+    
+    #Save the provided CSV as a pandas DataFrame
+    if filepath[-4: ] != ".csv":
+        raise TypeError("Error: the provided file must be a CSV.")
+    df = pd.read_csv(filepath)
+    
+    #Ensure the DataFrame is valid
+    if not len(df.axes[0]) >= 2:
+        raise ValueError("Error: the provided CSV must have at least 2 rows.")
+    
+    if not len(df.axes[1]) >= 3:
+        raise ValueError("Error: the provided CSV must have at least 3 columns.")
+    
+    if df.isnull().values.any():
+        raise ValueError("Error: the provided CSV must have no NaN values.")
+    
+    print("\nPROPORTION HYPOTHESIS TEST (3):\n"
+          "\nThe program will perform a 2-sample Z test for proportions at the "
+          "0.05 significance level for each provided variable.\n"
+           "-------------------------RESULTS-------------------------"
+           "\n")
+    
+    #Grab years
+    time1 = df[df.columns[0]][0]
+    time2 = df[df.columns[0]][len(df.axes[0]) - 1]
+    
+    #Get populations for years of interest
+    total_obs1 = df[df.columns[1]][0]
+    total_obs2 = df[df.columns[1]][len(df.axes[0]) - 1]
+    total_obs_ls = [total_obs1, total_obs2]
+    
+    #drop first 2 columns
+    df_dropped = df.drop(columns=df.columns[0:2], axis=1, inplace=False)
+    
+    #for each column in dropped df
+    for (col_name, col_data) in df_dropped.iteritems():
+        
+        #get counts
+        successes_yr1 = col_data[0]
+        successes_yr2 = col_data[len(df.axes[0]) - 1]
+        successes_ls = [successes_yr1, successes_yr2]
+        
+        #perform test
+        test_stat, pval = proportions_ztest(successes_ls, total_obs_ls)
+        
+        print("****\n")
+        print("VARIABLE: " + col_name + "\nNULL HYPOTHESIS: proportion in "
+              "" + str(time1) + " = proportion in " + str(time2) + ".\n")
+        
+        prop1 = successes_ls[0] / total_obs_ls[0]
+        prop2 = successes_ls[1] / total_obs_ls[1]
+        
+        #Reject null hypothesis
+        if pval <= 0.05:
+                        print("Result: reject null hypothesis that \nproportion 1 of " 
+                  "" + str(prop1) + " = proportion 2 of " + str(prop2) + ".\n"
+                  "Test Statistic: " + str(test_stat) + "\np-value: "
+                  "" + str(pval) + "\n")
+        
+        #Fail to reject null hypothesis
+        else:
+            print("Result: fail to reject null hypothesis that\nproportion 1 of" 
+                  " " + str(prop1) + " = proportion 2 of " + str(prop2) + ".\n"
+                  "Test Statistic: " + str(test_stat) + "\np-value: "
+                  "" + str(pval) + "\n")
+        
+    
+    print("------------------------------------------------------------------")
+    
+    #--------------------Plot the data------------------------------------
+    
+    pop_counts = df.iloc[:,1]
+    mydatetime = df.iloc[:,0]
+    
+    #Drop first 2 cols
+    df_dropped = df.drop(columns=df.columns[0:2], axis=1, inplace=False)
+
+    #Create a dataFrame with proportions instead of counts
+    new_rows = []
+    for index, row in df_dropped.iterrows():
+        temp_row = row.copy()
+        
+        #create proportions
+        for i in range(len(row)):
+            temp_row[i] = row[i] / pop_counts[index]
+            
+        new_rows.append(temp_row)
+    df_prop_no_year = pd.DataFrame(new_rows)
+
+    #add back in year
+    df_prop = df_prop_no_year
+    df_prop["datetime"] = mydatetime
+    
+    #Graph the data
+    x_var = df_prop.columns[len(df_prop.axes[1]) - 1]
+    df_prop_melted = pd.melt(frame=df_prop, id_vars=["datetime"], 
+                             var_name="Categories", value_name="Proportions")
+    sns.lineplot(data = df_prop_melted, x = x_var, y = "Proportions",
+                 hue = "Categories")
+    plt.show()
+    
+    
+    
+    # df_no_pop = df.drop(columns=df.columns[1], axis=1, inplace=False)
+    # x_var = df_no_pop.columns[0]
+    # df_no_pop_melted = df.melt(x_var, var_name="Categories",
+    #                            value_name="Counts")
+    
+    # #for index, row in df_dropped.iterrows():
+    # for i in range(len(df_dropped.axes[0])):
+    #     #temp_row = row.copy()
+    #     temp_row = df_dropped
+        
+    #     #iterate through the cols and create proportions
+    #     for j in range(len(row)):
+    #         temp_row[j] = row[j] / df.iloc[1]
+    
+    # #Creating the graphs using Seaborn
+    # x_var = df.columns[0]
+    # df_melted = df.melt(x_var, var_name="Populations",
+    #                                 value_name="Proportions")
+    # sns.lineplot(data = df_melted, x = x_var, y = "Proportions",
+    #              hue = "Populations")
+    # plt.show()
 
 #hypothesis_function_one('./pdf/test_files/wolf_and_deer_pop.csv')

@@ -76,7 +76,7 @@ class UnitTests(unittest.TestCase):
 
     #Logan's Stuff:
     #-----IO---------
-    # def test_proportion_file_format(self):
+    # def test_proportion_file_format(self): #check!
     #     """Input file is csv"""
     #     with self.assertRaises(TypeError):
     #         hypothesis_function_three('./pdf/WolfReport2017.pdf')
@@ -87,18 +87,18 @@ class UnitTests(unittest.TestCase):
     #         hypothesis_function_three(
     #             'pdf/test_files/prop_of_wolves_non_numeric.csv')
     
-    # def test_proportion_enough_entries(self):
+    # def test_proportion_enough_entries(self): check!
     #     """DataFrame has at least 2 rows"""
     #     with self.assertRaises(ValueError):
     #         hypothesis_function_three(
     #             'pdf/test_files/prop_of_wolves_one_row.csv')
     
-    # def test_proportion_enough_cols(self):
+    # def test_proportion_enough_cols(self): check!
     #     """DataFrame has at least 3 columns"""
     #     with self.assertRaises(ValueError):
     #         hypothesis_function_three('prop_of_wolves_two_col.csv')
     
-    # def test_proportion_no_nulls(self):
+    # def test_proportion_no_nulls(self): check!
     #     """DataFrame has no null values"""
     #     with self.assertRaises(ValueError):
     #         hypothesis_function_three(

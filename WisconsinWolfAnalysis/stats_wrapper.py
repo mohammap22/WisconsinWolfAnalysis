@@ -1,4 +1,6 @@
-from stats_module import *
+from stats_module import (hypothesis_function_one,
+                          hypothesis_function_two,
+                          hypothesis_function_three)
 
 
 def wrapper():
@@ -45,7 +47,7 @@ def wrapper():
             
         elif option == '3':
             filepath = input("You have selected option 3: Comparing two "
-                             "proportions.\nPlease provide the file path to a"
+                             "proportions.\nPlease provide the file path to a "
                              "CSV file containing the data you wish to use.\n"
                              "Note, the CSV must contain at least 3 columns - "
                              "the first must be a datetime, the second must "
@@ -53,7 +55,7 @@ def wrapper():
                              "third+ must be the number of observations with a "
                              "specific characteristic of interest.\n")
         
-            #A good test file: ./pdf/prop_of_wolves.csv
+            #A good test file: ./pdf/proportion_of_wolves.csv
             output = hypothesis_function_three(filepath)
             print(output)
             
