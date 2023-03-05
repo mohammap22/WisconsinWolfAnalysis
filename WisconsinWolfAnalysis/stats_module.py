@@ -1,7 +1,9 @@
 """PROGRAM DOCSTRING GOES HERE"""
 
 from scipy.stats import pearsonr, linregress
+from statsmodels.stats.proportion import proportions_ztest
 import pandas as pd
+import numpy as np
 from pandas.api.types import is_numeric_dtype
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -119,6 +121,85 @@ def hypothesis_function_two(filepath):
 
 def hypothesis_function_three(filepath):
     """MODULE DOCSTRING GOES HERE"""
-    return "Nothing written yet\n"
+    
+    #Save the provided CSV as a pandas DataFrame
+    if filepath[-4: ] != ".csv":
+        raise TypeError("Error: the provided file must be a CSV.")
+    df = pd.read_csv(filepath)
+    
+    #Ensure the DataFrame is valid
+    if not len(df.axes[0]) >= 2:
+        raise ValueError("Error: the provided CSV must have at least 2 rows.")
+    
+    if not len(df.axes[1]) >= 3:
+        raise ValueError("Error: the provided CSV must have at least 3 columns.")
+    
+    if df.isnull().values.any():
+        raise ValueError("Error: the provided CSV must have no NaN values.")
+    
+    print("\nPROPORTION HYPOTHESIS TEST (3):\n"
+          "\nThe program will perform a 2-sample Z test for proportions at the "
+          "0.05 significance level for each provided variable.\n"
+           "-------------------------RESULTS-------------------------"
+           "\n")
+    
+    #Conduct Tests
+    #import scipy.stats.distributions as dist
+    #pvalue = 2*dist.norm.cdf(-np.abs(test_stat))
+    
+    #Grab years
+    time1 = df[df.columns[0]][0]
+    time2 = df[df.columns[0]][len(df.axes[0]) - 1]
+    
+    #Get populations for years of interest
+    total_obs1 = df[df.columns[1]][0]
+    total_obs2 = df[df.columns[1]][len(df.axes[0]) - 1]
+    total_obs_ls = [total_obs1, total_obs2]
+    
+    #drop first 2 columns
+    df_dropped = df.drop(columns=df.columns[0:2], axis=1, inplace=False)
+    
+    #Get counts for rows of interest (first and last) //sucesses
+    # char_counts1 = df_dropped.iloc[0].tolist()
+    # char_counts2 = df_dropped.iloc[len(df.axes[0] - 1)].tolist()
+    
+    #Make lists of total observation counts
+    # total_obs1_ls = [total_obs1] * len(char_counts1)
+    # total_obs2_ls = [total_obs2] * len(char_counts2)
+    
+    #for each column in dropped df
+    for (col_name, col_data) in df_dropped.iteritems():
+        
+        #get counts
+        successes_yr1 = col_data[0]
+        successes_yr2 = col_data[len(df.axes[0]) - 1]
+        successes_ls = [successes_yr1, successes_yr2]
+        
+        #perform test
+        test_stat, pval = proportions_ztest(successes_ls, total_obs_ls)
+        
+        print("****\n")
+        print("VARIABLE: " + col_name + "\nNULL HYPOTHESIS: proportion in "
+              "" + str(time1) + " = proportion in " + str(time2) + ".\n")
+        
+        prop1 = successes_ls[0] / total_obs_ls[0]
+        prop2 = successes_ls[1] / total_obs_ls[1]
+        
+        #Reject null hypothesis
+        if pval <= 0.05:
+                        print("Result: reject null hypothesis that \nproportion 1 of " 
+                  "" + str(prop1) + " = proportion 2 of " + str(prop2) + ".\n"
+                  "Test Statistic: " + str(test_stat) + "\np-value: "
+                  "" + str(pval) + "\n")
+        
+        #Fail to reject null hypothesis
+        else:
+            print("Result: fail to reject null hypothesis that\nproportion 1 of" 
+                  " " + str(prop1) + " = proportion 2 of " + str(prop2) + ".\n"
+                  "Test Statistic: " + str(test_stat) + "\np-value: "
+                  "" + str(pval) + "\n")
+        
+    
+    print("------------------------------------------------------------------")
 
 #hypothesis_function_one('./pdf/test_files/wolf_and_deer_pop.csv')
