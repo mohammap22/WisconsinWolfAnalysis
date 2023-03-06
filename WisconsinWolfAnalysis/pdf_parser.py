@@ -37,7 +37,8 @@ def pdf_parser(pdf_files_list, pdf_folder):
         merged_data_dir = os.path.join(pdf_folder, directory_name,
                                        "Merged_Data")
         os.makedirs(merged_data_dir, exist_ok=True)
-        tables = camelot.read_pdf(file_location,pages = "all",flavor='stream' ,edge_tol = 500)
+        tables = camelot.read_pdf(file_location, pages="all", flavor='stream',
+                                  edge_tol=500)
 
         for i, table in enumerate(tables):
             df = table.df.applymap(is_sentence)
@@ -53,6 +54,9 @@ def pdf_parser(pdf_files_list, pdf_folder):
 
             non_null_cols = df.columns[df.notnull().any()].tolist()
             file_name = '_'.join(non_null_cols)
+            file_name = file_name.replace("%", "percent")
+            file_name = file_name.replace("#", "number")
+            file_name = file_name.replace("w/", "with")
 
             has_useful_values = False
             for column in df.columns:
@@ -78,14 +82,22 @@ def pdf_parser(pdf_files_list, pdf_folder):
                                   index=False)
                     else:
                         merged_df = pd.concat(dfs, ignore_index=True)
+                        col_names = ""
+                        for col in cols:
+                            col_names = col_names + col
+                        # col_names = {cols}
+                        col_names = col_names.replace("%", "percent")
+                        col_names = col_names.replace("#", "number")
+                        col_names = col_names.replace("w/", "with")
                         csv_file = os.path.join(merged_data_dir,
-                                                f"data_{cols}.csv")
+                                                "data_" + col_names + ".csv")
                         merged_df.to_csv(csv_file, index=False)
             else:
                 # Save the dataframe as a CSV file in the "BadData"
                 # directory
                 df.to_csv(os.path.join(pdf_folder, directory_name,
                           "BadData", file_name + str(i) + '.csv'), index=False)
+
 
 def is_sentence(cell):
     if isinstance(cell, str) and cell.endswith('.'):
@@ -95,6 +107,7 @@ def is_sentence(cell):
     else:
         return cell
 
-#pdf_list = glob.glob('pdf/*.pdf')
 
-#pdf_parser(pdf_list, 'pdf')
+pdf_list = glob.glob('pdf/*.pdf')
+
+pdf_parser(pdf_list, 'pdf/')

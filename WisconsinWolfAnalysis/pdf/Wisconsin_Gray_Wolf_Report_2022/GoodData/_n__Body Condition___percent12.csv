@@ -1,0 +1,57 @@
+,n,,Body Condition,,,%
+,,,,,Age,% w/Ticks
+,,Good,Fair,Poor,,w/Mange
+Zone 1,,,,,,
+Research Captures,3,,,,,
+,,,,,1 Yearling,
+male,2,2,--,--,,"0 
+0"
+Sex,,,,,1 Adults,
+female,1,1,--,--,1 Yearling,"0 
+0"
+Zone 2,,,,,,
+Research Captures,1,,,,,
+male,1,1,--,--,1 Adult,"0 
+0"
+Sex,,,,,,
+female,--,--,--,--,--,
+Zone 3,,,,,,
+Research Captures,5,,,,,
+male,4,3,1,--,4 Adults,"25 
+100"
+Sex,,,,,,
+female,1,--,1,--,1 Yearling,"0 
+100"
+Zone 4,,,,,,
+Research Captures,2,,,,,
+male,1,1,--,--,1 Adult,"0 
+100"
+Sex,,,,,,
+female,1,1,--,--,1 Adult,"0 
+100"
+Zone 5,,,,,,
+Research Captures,2,,,,,
+male,--,--,--,--,--,"0 
+0"
+Sex,,,,,1 Yearling,
+female,2,2,--,--,,"0 
+50"
+,,,,,1 Adult,
+Zone 6,,,,,,
+Research Captures,1,,,,,
+male,1,1,--,--,1 Adult,"0 
+100"
+Sex,,,,,,
+female,--,--,--,--,"-- 
+--",--
+STATEWIDE,,,,,,
+Research Captures,14,,,,,
+,,,,,1 Yearling,
+male,9,8,1,--,,"11 
+66"
+,,,,,8 Adults,
+Sex,,,,,,
+,,,,,3 Yearlings,
+female,5,4,1,--,,"0 
+60"
+,,,,,2 Adults,
