@@ -7,7 +7,7 @@ pdf_parser is function being tested
 import unittest
 import os
 import shutil
-from WisconsinWolfAnalysis.pdf_parser import pdf_parser
+from pdf_parser import pdf_parser
 
 
 class TestPdfParser(unittest.TestCase):
