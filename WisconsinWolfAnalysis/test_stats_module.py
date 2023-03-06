@@ -1,6 +1,7 @@
 """MODULE DOCSTRING GOES HERE"""
 
 import unittest
+from unittest.mock import patch
 from stats_module import (hypothesis_function_one,
                                                 hypothesis_function_two ,hypothesis_function_three)
 
