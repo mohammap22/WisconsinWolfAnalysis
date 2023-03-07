@@ -1,7 +1,9 @@
 import os
-import camelot
+import re
 import glob
 import pandas as pd
+
+import camelot
 
 
 def pdf_parser(pdf_files_list, pdf_folder):
@@ -27,6 +29,7 @@ def pdf_parser(pdf_files_list, pdf_folder):
         # Create a new directory based on the file name
         file_name = os.path.basename(file_location)
         print(file_name)
+        pdf_report_year = re.search(r"[1-2][0-9]{3}", file_name)
         directory_name = os.path.splitext(file_name)[0]
         os.makedirs(os.path.join(pdf_folder, directory_name), exist_ok=True)
 
@@ -66,6 +69,10 @@ def pdf_parser(pdf_files_list, pdf_folder):
                                                   and value.strip() != ''):
                         has_useful_values = True
                         break
+
+            if pdf_report_year[0] is not None:
+                df['PDF_Year'] = int(pdf_report_year[0])
+
             if has_useful_values:
                 cols = tuple(df.columns)
                 if cols not in dataframes:
@@ -108,6 +115,53 @@ def is_sentence(cell):
         return cell
 
 
+def data_merger(pdf_file_list, pdf_folder, match_string):
+    os.makedirs(os.path.join(pdf_folder, "CombinedData"), exist_ok=True)
+
+    csv_path_list = []
+    for pdf_file in pdf_file_list:
+        pdf_good_data_csv_path = pdf_file[:-4]+'/GoodData/*.csv'
+        pdf_good_data_csv_list = glob.glob(pdf_good_data_csv_path)
+        pdf_merged_data_csv_path = pdf_file[:-4]+'/Merged_Data/*.csv'
+        pdf_merged_data_csv_list = glob.glob(pdf_merged_data_csv_path)
+        csv_path_list = csv_path_list + pdf_good_data_csv_list
+        csv_path_list = csv_path_list + pdf_merged_data_csv_list
+
+    df_list = []
+    for csv_file_path in csv_path_list:
+        df = pd.read_csv(csv_file_path)
+        df_list.append(df)
+
+    result_list = []
+    for df in df_list:
+        rows = df[(df == match_string).any(axis=1)]
+
+        for i in range(len(rows)):
+            year = rows.iat[i, -1]
+            match_value = rows.iat[i, -2]
+            if type(match_value) is str:
+                match_value = match_value.replace(",", "")
+                match_value_num = float(match_value)
+            else:
+                match_value_num = match_value
+            result_list.append([year, match_value_num])
+
+    output_df = pd.DataFrame(result_list)
+    output_df = output_df.drop_duplicates()
+    output_df = output_df.dropna()
+
+    output_df.columns = ['Year', match_string]
+
+    return output_df
+
+
 pdf_list = glob.glob('pdf/*.pdf')
 
-pdf_parser(pdf_list, 'pdf/')
+# pdf_parser(pdf_list, 'pdf/')
+
+cattle_killed = data_merger(pdf_list, 'pdf/', 'Cattle Killed')
+
+investigations = data_merger(pdf_list, 'pdf/',
+                             '# of Wolf related Investigations conducted:')
+
+observations = data_merger(pdf_list, 'pdf/', 'Statewide')
