@@ -1,16 +1,16 @@
-T,,,,,,,
-,,,,,,,2015-17
-Wolf,,# of Deer,Deer,2015 Post-Hunt,2016 Post-Hunt,,
-,,,,,,%,Deer
-,,,Range,Deer Density,Deer Density,,
-,,,,,,Change,Population
-Unit,,Zones,(mi2),(Deer/mi2),(Deer/mi2),,
-,,,,,,,Objective
-,1,6,"6,705",12.7,18.7,+47%,Increase
-,2,6,"4,573",16.2,19.2,+19%,Increase
-,3,4,"3,141",25.6,31.0,+21%,Increase
-,4,4,"2,305",24.8,35.7,+44%,Increase
-,5,7,"2,315",28.1,31.5,+12%,Increase
-,6,53,16995,48.3,51.7,+7%,Maintain
-TOTAL,,80,"36,034",33.0,37.3,+13%,
-,,,,,,,
+T,,,,,,,,PDF_Year
+,,,,,,,2015-17,2017
+Wolf,,# of Deer,Deer,2015 Post-Hunt,2016 Post-Hunt,,,2017
+,,,,,,%,Deer,2017
+,,,Range,Deer Density,Deer Density,,,2017
+,,,,,,Change,Population,2017
+Unit,,Zones,(mi2),(Deer/mi2),(Deer/mi2),,,2017
+,,,,,,,Objective,2017
+,1,6,"6,705",12.7,18.7,+47%,Increase,2017
+,2,6,"4,573",16.2,19.2,+19%,Increase,2017
+,3,4,"3,141",25.6,31.0,+21%,Increase,2017
+,4,4,"2,305",24.8,35.7,+44%,Increase,2017
+,5,7,"2,315",28.1,31.5,+12%,Increase,2017
+,6,53,16995,48.3,51.7,+7%,Maintain,2017
+TOTAL,,80,"36,034",33.0,37.3,+13%,,2017
+,,,,,,,,2017
