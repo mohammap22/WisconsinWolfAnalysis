@@ -44,6 +44,7 @@ class UnitTests(unittest.TestCase):
 
     @patch("stats_module.plt.show")
     def test_correlation_of_one(self, mock_show):
+        #pylint: disable=unused-argument
         """This test verifies that we get a pearsons correlation of 
         1 given exactly the same data in x and y"""
         self.assertAlmostEqual(hypothesis_function_one(
