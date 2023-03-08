@@ -1,10 +1,10 @@
 """MODULE DOCSTRING GOES HERE"""
 
 import unittest
-from WisconsinWolfAnalysis.stats_module import (hypothesis_function_one,
-                                                hypothesis_function_two)
+from unittest.mock import patch
+from stats_module import (hypothesis_function_one, 
+                          hypothesis_function_two)
 # ,hypothesis_function_three)
-
 
 class UnitTests(unittest.TestCase):
     """
@@ -42,8 +42,9 @@ class UnitTests(unittest.TestCase):
             hypothesis_function_one(
                 'pdf/test_files/wolf_and_deer_pop_nulls.csv')
 
-    def test_correlation_of_one(self):
-        """This test verifies that we get a pearsons correlation of
+    @patch("stats_module.plt.show")
+    def test_correlation_of_one(self, mock_show):
+        """This test verifies that we get a pearsons correlation of 
         1 given exactly the same data in x and y"""
         self.assertAlmostEqual(hypothesis_function_one(
             './pdf/test_files/wolf_and_deer_pop_perf_corr.csv'),
