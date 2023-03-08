@@ -1,23 +1,25 @@
+"""Docstring Goes Here"""
 from stats_module import (hypothesis_function_one,
                           hypothesis_function_two,
                           hypothesis_function_three)
 
 
 def wrapper():
+    """TBD Goes Here"""
     options_str = input("------------------Statistical Analysis--------------\n"
           "Hello! Would you like to statistically test the correlation between "
           "two variables (1) examine trends over time (2), and/or compare "
           "two proportions (3)? \nPlease enter a comma separated list of the "
           "desired options.\n")
-    
+
     options_ls = options_str.split(",")
-    
+
     #------------------Check for illegal input-----------------
     #<1 or >3 options specified
     if (len(options_ls) < 1) or (len(options_ls) > 3):
         raise ValueError("Invalid Input: User must provide between 1 and 3 "
                          "options.")
-    
+
     #Perform the requested tasks
     for option in options_ls:
         if option == '1':
@@ -28,11 +30,10 @@ def wrapper():
                              "columns; the 1st is date/time, the 2nd is "
                              "population 1 data, and the 3rd is population 2 "
                              "data.\n")
-            
+
             #A good test file: ./pdf/wolf_and_deer_pop.csv
-            outputs = hypothesis_function_one(filepath)
-            #print(outputs)
-        
+            hypothesis_function_one(filepath)
+
         elif option == '2':
             filepath = input("You have selected option 2: Time-series "
                              "visualization of data and trends.\nPlease "
@@ -40,11 +41,10 @@ def wrapper():
                              "the data you wish to use.\nNote, the CSV must "
                              "contain at least 2 columns - the first must be a "
                              "datetime, and the second+ is/are a variable.\n")
-        
+
             #A good test file: ./pdf/wolf_and_deer_pop.csv
-            output = hypothesis_function_two(filepath)
-            #print(output)
-            
+            hypothesis_function_two(filepath)
+
         elif option == '3':
             filepath = input("You have selected option 3: Comparing two "
                              "proportions.\nPlease provide the file path to a "
@@ -54,11 +54,10 @@ def wrapper():
                              "be the total\nnumber of observations, and the "
                              "third+ must be the number of observations with a "
                              "specific characteristic of interest.\n")
-        
+
             #A good test file: ./pdf/proportion_of_wolves.csv
-            output = hypothesis_function_three(filepath)
-            print(output)
-            
+            hypothesis_function_three(filepath)
+
         else:
             raise ValueError("User has not entered a valid option.")
 
