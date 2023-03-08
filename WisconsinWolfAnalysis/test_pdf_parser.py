@@ -7,7 +7,8 @@ pdf_parser is function being tested
 import unittest
 import os
 import shutil
-from pdf_parser import pdf_parser
+from WisconsinWolfAnalysis.pdf_parser import pdf_parser
+
 
 class TestPdfParser(unittest.TestCase):
     """Test suite for pdf_parser function"""
@@ -16,7 +17,7 @@ class TestPdfParser(unittest.TestCase):
     def setUpClass(cls):
         """Set up pdf parser and data"""
         cls.pdf_files_list = ["pdf/Wisconsin_Gray_Wolf_Report_2022.pdf"]
-        pdf_parser(cls.pdf_files_list,".")
+        pdf_parser(cls.pdf_files_list, ".")
 
     @classmethod
     def tearDownClass(cls):
@@ -38,8 +39,10 @@ class TestPdfParser(unittest.TestCase):
         Then it should create a subdirectory "GoodData" in the directory
         And the subdirectory should contain at least one CSV file
         """
-        self.assertTrue(os.path.exists("Wisconsin_Gray_Wolf_Report_2022/GoodData"))
-        good_data_files = os.listdir("Wisconsin_Gray_Wolf_Report_2022/GoodData")
+        self.assertTrue(os.path.exists("Wisconsin_Gray_Wolf_Report_2022/" +
+                                       "GoodData"))
+        good_data_files = os.listdir("Wisconsin_Gray_Wolf_Report_2022/" +
+                                     " GoodData")
         self.assertTrue(len(good_data_files) >= 1)
         for file in good_data_files:
             self.assertTrue(file.endswith(".csv"))
@@ -51,8 +54,10 @@ class TestPdfParser(unittest.TestCase):
         Then it should create a subdirectory "BadData" in the directory
         And the subdirectory should contain at least one CSV file
         """
-        self.assertTrue(os.path.exists("Wisconsin_Gray_Wolf_Report_2022/BadData"))
-        bad_data_files = os.listdir("Wisconsin_Gray_Wolf_Report_2022/BadData")
+        self.assertTrue(os.path.exists("Wisconsin_Gray_Wolf_Report_2022/" +
+                                       "BadData"))
+        bad_data_files = os.listdir("Wisconsin_Gray_Wolf_Report_2022/" +
+                                    "BadData")
         self.assertTrue(len(bad_data_files) >= 1)
         for file in bad_data_files:
             self.assertTrue(file.endswith(".csv"))
@@ -64,11 +69,14 @@ class TestPdfParser(unittest.TestCase):
         Then it should create a subdirectory "MergedData" in the directory
         And the subdirectory should contain at least one CSV file
         """
-        self.assertTrue(os.path.exists("Wisconsin_Gray_Wolf_Report_2022/Merged_Data"))
-        merged_data_files = os.listdir("Wisconsin_Gray_Wolf_Report_2022/Merged_Data")
+        self.assertTrue(os.path.exists("Wisconsin_Gray_Wolf_Report_2022/" +
+                                       "Merged_Data"))
+        merged_data_files = os.listdir("Wisconsin_Gray_Wolf_Report_2022/" +
+                                       "Merged_Data")
         self.assertTrue(len(merged_data_files) >= 1)
         for file in merged_data_files:
             self.assertTrue(file.endswith(".csv"))
+
 
 if __name__ == '__main__':
     unittest.main()
