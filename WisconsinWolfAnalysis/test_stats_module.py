@@ -1,8 +1,8 @@
 """MODULE DOCSTRING GOES HERE"""
 
 import unittest
-from WisconsinWolfAnalysis.stats_module import (hypothesis_function_one,
-                                                hypothesis_function_two)
+from stats_module import (hypothesis_function_one,
+                          hypothesis_function_two)
 # ,hypothesis_function_three)
 
 
