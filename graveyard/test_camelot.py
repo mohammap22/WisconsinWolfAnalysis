@@ -1,18 +1,15 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Mar  1 21:30:56 2023
+"""Module docstring goes here"""
 
-@author: kltor
-"""
-import pandas as pd
 import unittest
-
+import pandas as pd
 import camelot
 
 
 class TestKnn(unittest.TestCase):
+    "class docstring goes here"
 
     def camelot_smoke_test(self):
+        """function docstring goes here"""
         data = camelot.read_pdf('pdf/Deer Health - Disease.pdf', pages='all')
         expected_result = pd.DataFrame[['', '', '', '', '', ''],
                                        ['', '', '', '', '', '']]

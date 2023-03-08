@@ -3,7 +3,6 @@
 from scipy.stats import pearsonr, linregress
 from statsmodels.stats.proportion import proportions_ztest
 import pandas as pd
-import numpy as np
 from pandas.api.types import is_numeric_dtype
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -83,8 +82,9 @@ def hypothesis_function_one(filepath):
           "\n")
 
     # Graphing the line of best fit and the data
-    graph=sns.scatterplot(x=x_var, y=y_var)
+    sns.scatterplot(x=x_var, y=y_var)
     line_of_best_fit = []
+    #pylint: disable=consider-using-enumerate)
     for i in range(len(x_var)):
         line_of_best_fit.append(intercept + slope*x_var[i])
     plt.plot(x_var, line_of_best_fit, color='orange')
@@ -131,7 +131,7 @@ def hypothesis_function_two(filepath):
     sns.lineplot(data=graph_df_melted, x=x_var, y="Counts",
                  hue="Populations")
     plt.show()
-
+    #pylint: disable=too-many-locals
 
 def hypothesis_function_three(filepath):
     """MODULE DOCSTRING GOES HERE"""
@@ -139,17 +139,17 @@ def hypothesis_function_three(filepath):
     # Save the provided CSV as a pandas DataFrame
     if filepath[-4:] != ".csv":
         raise TypeError("Error: the provided file must be a CSV.")
-    df = pd.read_csv(filepath)
+    prop_df = pd.read_csv(filepath)
 
     # Ensure the DataFrame is valid
-    if not len(df.axes[0]) >= 2:
+    if not len(prop_df.axes[0]) >= 2:
         raise ValueError("Error: the provided CSV must have at least 2 rows.")
 
-    if not len(df.axes[1]) >= 3:
+    if not len(prop_df.axes[1]) >= 3:
         raise ValueError("Error: the provided CSV must have at least 3" +
                          " columns.")
 
-    if df.isnull().values.any():
+    if prop_df.isnull().values.any():
         raise ValueError("Error: the provided CSV must have no NaN values.")
 
     print("\nPROPORTION HYPOTHESIS TEST (3):\n"
@@ -159,23 +159,23 @@ def hypothesis_function_three(filepath):
           "\n")
 
     # Grab years
-    time1 = df[df.columns[0]][0]
-    time2 = df[df.columns[0]][len(df.axes[0]) - 1]
+    time1 = prop_df[prop_df.columns[0]][0]
+    time2 = prop_df[prop_df.columns[0]][len(prop_df.axes[0]) - 1]
 
     # Get populations for years of interest
-    total_obs1 = df[df.columns[1]][0]
-    total_obs2 = df[df.columns[1]][len(df.axes[0]) - 1]
+    total_obs1 = prop_df[prop_df.columns[1]][0]
+    total_obs2 = prop_df[prop_df.columns[1]][len(prop_df.axes[0]) - 1]
     total_obs_ls = [total_obs1, total_obs2]
 
     # drop first 2 columns
-    df_dropped = df.drop(columns=df.columns[0:2], axis=1, inplace=False)
+    df_dropped = prop_df.drop(columns=prop_df.columns[0:2], axis=1, inplace=False)
 
     # for each column in dropped df
     for (col_name, col_data) in df_dropped.iteritems():
 
         # get counts
         successes_yr1 = col_data[0]
-        successes_yr2 = col_data[len(df.axes[0]) - 1]
+        successes_yr2 = col_data[len(prop_df.axes[0]) - 1]
         successes_ls = [successes_yr1, successes_yr2]
 
         # perform test
@@ -207,11 +207,11 @@ def hypothesis_function_three(filepath):
 
     # --------------------Plot the data------------------------------------
 
-    pop_counts = df.iloc[:, 1]
-    mydatetime = df.iloc[:, 0]
+    pop_counts = prop_df.iloc[:, 1]
+    mydatetime = prop_df.iloc[:, 0]
 
     # Drop first 2 cols
-    df_dropped = df.drop(columns=df.columns[0:2], axis=1, inplace=False)
+    df_dropped = prop_df.drop(columns=prop_df.columns[0:2], axis=1, inplace=False)
 
     # Create a dataFrame with proportions instead of counts
     new_rows = []
@@ -219,6 +219,7 @@ def hypothesis_function_three(filepath):
         temp_row = row.copy()
 
         # create proportions
+        #pylint: disable=consider-using-enumerate
         for i in range(len(row)):
             temp_row[i] = row[i] / pop_counts[index]
 
