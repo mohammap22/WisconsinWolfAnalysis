@@ -1,11 +1,19 @@
+"""
+Importing os for file creation
+Importion re for regex
+importing glob for filesystem
+Importing Pandas for dataframe parsing
+Importing Camelot for PDF parsing
+"""
 import os
 import re
 import glob
 import pandas as pd
-
 import camelot
 
-
+# pylint: disable-msg=too-many-locals
+# pylint: disable-msg=too-many-nested-blocks
+# pylint: disable-msg=too-many-branches
 def pdf_parser(pdf_files_list, pdf_folder):
     """
     Extracts data tables from a list of PDF files. For each file, it
@@ -13,11 +21,9 @@ def pdf_parser(pdf_files_list, pdf_folder):
     each file, folders are created for good, bad, and merged data files,
     and the tables extracted from the PDF are saved into the good folder
     if they contain data or the bad folder if they are empty.
-
     Inputs:
     :pdf_files_list - a list of files from which data will be extracted
     :pdf_folder - a folder location to save the output files.
-
     Ouputs:
     :nothing is returned by this function, but it will create folders
     and data files of the data in the pdfs that are ind pdf_file_list
@@ -40,30 +46,29 @@ def pdf_parser(pdf_files_list, pdf_folder):
         merged_data_dir = os.path.join(pdf_folder, directory_name,
                                        "Merged_Data")
         os.makedirs(merged_data_dir, exist_ok=True)
-        tables = camelot.read_pdf(file_location, pages="all", flavor='stream',
-                                  edge_tol=500)
+        tables = camelot.read_pdf(
+            file_location, pages="all", flavor='stream', edge_tol=500)
 
         for i, table in enumerate(tables):
-            df = table.df.applymap(is_sentence)
+            given_df = table.df.applymap(is_sentence)
 
             non_empty_row_idx = 0
-            for row_idx, row in enumerate(df.values):
+            for row_idx, row in enumerate(given_df.values):
                 if not all(cell == '' for cell in row):
                     non_empty_row_idx = row_idx
                     break
-            column_names = df.iloc[non_empty_row_idx]
-            df = df.iloc[non_empty_row_idx+1:].reset_index(drop=True)
-            df.columns = column_names
+            column_names = given_df.iloc[non_empty_row_idx]
+            given_df = given_df.iloc[non_empty_row_idx +
+                                     1:].reset_index(drop=True)
+            given_df.columns = column_names
 
-            non_null_cols = df.columns[df.notnull().any()].tolist()
-            file_name = '_'.join(non_null_cols)
-            file_name = file_name.replace("%", "percent")
-            file_name = file_name.replace("#", "number")
-            file_name = file_name.replace("w/", "with")
+            non_null_cols = given_df.columns[given_df.notnull().any()].tolist()
+
+            file_name = make_file_names(non_null_cols)
 
             has_useful_values = False
-            for column in df.columns:
-                column_values = df[column].values
+            for column in given_df.columns:
+                column_values = given_df[column].values
                 for value in column_values:
                     if isinstance(value, int) or (isinstance(value, str)
                                                   and value.strip() != ''):
@@ -71,22 +76,22 @@ def pdf_parser(pdf_files_list, pdf_folder):
                         break
 
             if pdf_report_year[0] is not None:
-                df['PDF_Year'] = int(pdf_report_year[0])
+                given_df['PDF_Year'] = int(pdf_report_year[0])
 
             if has_useful_values:
-                cols = tuple(df.columns)
+                cols = tuple(given_df.columns)
                 if cols not in dataframes:
                     dataframes[cols] = []
-                dataframes[cols].append(df)
+                dataframes[cols].append(given_df)
 
                 for cols, dfs, in dataframes.items():
                     if len(dfs) == 1:
-                        df = dfs[0]
+                        given_df = dfs[0]
                         # Save the dataframe as a CSV file
                         # in the "GoodData" directory
-                        df.to_csv(os.path.join(pdf_folder, directory_name,
-                                  "GoodData", file_name + str(i) + '.csv'),
-                                  index=False)
+                        given_df.to_csv(os.path.join(
+                            pdf_folder, directory_name, "GoodData",
+                            file_name + str(i) + '.csv'), index=False)
                     else:
                         merged_df = pd.concat(dfs, ignore_index=True)
                         col_names = ""
@@ -102,49 +107,68 @@ def pdf_parser(pdf_files_list, pdf_folder):
             else:
                 # Save the dataframe as a CSV file in the "BadData"
                 # directory
-                df.to_csv(os.path.join(pdf_folder, directory_name,
-                          "BadData", file_name + str(i) + '.csv'), index=False)
+                given_df.to_csv(os.path.join(
+                    pdf_folder, directory_name, "BadData", file_name
+                    + str(i) + '.csv'), index=False)
+
+def make_file_names(cols):
+    """
+    Replaces bad names for
+    columns
+    """
+    file_name = '_'.join(cols)
+    file_name = file_name.replace("%", "percent")
+    file_name = file_name.replace("#", "number")
+    file_name = file_name.replace("w/", "with")
+    return file_name
 
 
 def is_sentence(cell):
+    """
+    Detects if a certain cell is a
+    sentance or not
+    """
     if isinstance(cell, str) and cell.endswith('.'):
         return ''
     if isinstance(cell, str) and len(cell) > 50:
         return ''
-    else:
-        return cell
+    return cell
 
 
 def data_merger(pdf_file_list, pdf_folder, match_string):
+    """
+    Merging dataframes based upon
+    the column names inside the
+    'CombinedData' directory
+    """
     os.makedirs(os.path.join(pdf_folder, "CombinedData"), exist_ok=True)
 
     csv_path_list = []
     for pdf_file in pdf_file_list:
-        pdf_good_data_csv_path = pdf_file[:-4]+'/GoodData/*.csv'
-        pdf_good_data_csv_list = glob.glob(pdf_good_data_csv_path)
-        pdf_merged_data_csv_path = pdf_file[:-4]+'/Merged_Data/*.csv'
-        pdf_merged_data_csv_list = glob.glob(pdf_merged_data_csv_path)
+        #pdf_good_data_csv_path = pdf_file[:-4]+'/GoodData/*.csv'
+        pdf_good_data_csv_list = glob.glob(pdf_file[:-4]+'GoodData/*.csv')
+        #pdf_merged_data_csv_path = pdf_file[:-4]+'/Merged_Data/*.csv'
+        pdf_merged_data_csv_list = glob.glob(pdf_file[:-4]+'/Merged_Data/*.csv')
         csv_path_list = csv_path_list + pdf_good_data_csv_list
         csv_path_list = csv_path_list + pdf_merged_data_csv_list
 
     df_list = []
     for csv_file_path in csv_path_list:
-        df = pd.read_csv(csv_file_path)
-        df_list.append(df)
+        #given_df = pd.read_csv(csv_file_path)
+        df_list.append(pd.read_csv(csv_file_path))
 
     result_list = []
-    for df in df_list:
-        rows = df[(df == match_string).any(axis=1)]
+    for my_df in df_list:
+        rows = my_df[(my_df == match_string).any(axis=1)]
 
         for i in range(len(rows)):
             year = rows.iat[i, -1]
             match_value = rows.iat[i, -2]
-            if type(match_value) is str:
+            if isinstance(match_value, str):
                 match_value = match_value.replace(",", "")
-                match_value_num = float(match_value)
-            else:
-                match_value_num = match_value
-            result_list.append([year, match_value_num])
+                #match_value_num = float(match_value)
+                match_value = float(match_value)
+            result_list.append([year, match_value])
 
     output_df = pd.DataFrame(result_list)
     output_df = output_df.drop_duplicates()
@@ -155,13 +179,13 @@ def data_merger(pdf_file_list, pdf_folder, match_string):
     return output_df
 
 
-pdf_list = glob.glob('pdf/*.pdf')
+PDF_LIST = glob.glob('pdf/*.pdf')
 
 # pdf_parser(pdf_list, 'pdf/')
 
-cattle_killed = data_merger(pdf_list, 'pdf/', 'Cattle Killed')
+CATTLE_KILLED = data_merger(PDF_LIST, 'pdf/', 'Cattle Killed')
 
-investigations = data_merger(pdf_list, 'pdf/',
+INVESTIGATIONS = data_merger(PDF_LIST, 'pdf/',
                              '# of Wolf related Investigations conducted:')
 
-observations = data_merger(pdf_list, 'pdf/', 'Statewide')
+OBSERVATIONS = data_merger(PDF_LIST, 'pdf/', 'Statewide')
