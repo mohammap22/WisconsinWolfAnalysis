@@ -21,7 +21,8 @@ def hypothesis_function_one(filepath):
     p_value: numeric
         p-value of the Pearson R correlation
     -----------------------------Side Effects--------------------------
-    None
+    Prints graph with population 1 vs. population 2 and best fit line
+        in an independent window
     ------------------------------Exceptions---------------------------
     TypeError raised if:
         The input file isn't a csv, doesn't have 3 columns,
@@ -105,8 +106,8 @@ def hypothesis_function_two(filepath):
     --------------------------Return Values----------------------------
     None
     -----------------------------Side Effects--------------------------
-    Prints a graph of the second+ columns vs. the first column to the
-        screen
+    Prints a graph with the first column on the x axis and the remaining
+        columns on the y-axis
     ------------------------------Exceptions---------------------------
     TypeError raised if:
         The input file isn't a csv, dataframe doesn't have >2 columns,
@@ -134,8 +135,20 @@ def hypothesis_function_two(filepath):
     #pylint: disable=too-many-locals
 
 def hypothesis_function_three(filepath):
-    """MODULE DOCSTRING GOES HERE"""
-
+    """    
+    Brief description
+    ---------------------------Arguments-------------------------------
+    var: type
+        description
+    --------------------------Return Values----------------------------
+    var: type
+        description
+    -----------------------------Side Effects--------------------------
+    side effects
+    ------------------------------Exceptions---------------------------
+    <Error> raised if:
+        <conditions>
+    """
     # Save the provided CSV as a pandas DataFrame
     if filepath[-4:] != ".csv":
         raise TypeError("Error: the provided file must be a CSV.")
