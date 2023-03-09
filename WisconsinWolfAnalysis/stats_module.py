@@ -6,7 +6,7 @@ hypothesis_function_two: graphs populations over time
 hypothesis_function_three: compares two %s and graphs vars over time
 --------------------------------Exceptions-----------------------------
 TypeError: raised if inputs do not meet specifications
-ValueError: raised if arguments do not meet specifications
+ValueError: raised if inputs do not meet specifications
 """
 
 from scipy.stats import pearsonr, linregress
