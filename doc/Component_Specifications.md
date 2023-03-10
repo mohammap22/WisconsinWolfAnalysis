@@ -120,40 +120,37 @@ The software components detailed below interact to allow a user interested in an
 
     - Outputs: 
         * Hypothesis Function One:
-            ** Time-series visualization of data and trends
-            ** Null hypothesis, statistical test, and results of correlation statistical test
+            ** Scatter plot of raw data with best fit line
+            ** Null hypothesis of linearity and rejection/failure to reject ** Null hypothesis of no correlation and rejection/failure to reject
+            **Pearson's correlation coefficient, and p-value for correlation statistical test
         * Hypothesis Function Two:
-            ** Time-series visualization of data and trends
+            ** Line graph of first column vs. populations (columns 2+) 
         * Hypothesis Function Three:
-            ** Graphical Output
-            ** Null hypothesis, statistical test, and results of statistical test
+            ** Line graphs of proportions over time
+            ** Null hypothesis, results of 2-sided z-test
 
     - Design:
         * Hypothesis function 1: Correlation between two variables/populations
-            ** The function asks the user for a dataframe with 3 columns, 1st is date/time, 2nd is population 1 data, 3rd is population 2 data (opportunity to increase scope by handling imperfect dataframe inputs e.g., only running the test on rows with data in both columns)
             ** The function validates the dataframe and outputs an error message if necessary
             ** If no error in the dataframe format/content:
-                *** The function will alert the user that it is running a simple linear regression with robust standard errors (opportunity to increase scope by letting users pick alternate tests)
+                *** The function will alert the user that it is running a simple linear regression and calculating the Pearson Correlation Coefficient
                 *** Run statistical test
             ** After the test is run:
-                *** The function outputs the correlation, best fit line equation, and interpretation
+                *** The function outputs if the null hypothesis of no linear relationship can be rejected, if the null hypothesis of no correlation can be rejected, the correlation coefficient, and the p-value for the correlation coefficient
                 *** The function also outputs a graph of population 1 vs population 2 datapoints fitted with a trendline, giving the user the option to save the visualization  
 
         * Hypothesis function 2: Examining trends over time
-            ** The function asks the user for a dataframe with at least 2 columns - the first must be a datetime, and the second+ is/are a variable 
             ** The function validates the dataframe and outputs an error message if necessary
-            ** If no error in the dataframe format/content, the function asks which trends (via column names) the user wants to graph over time and verifies the request is valid
-            ** The function outputs a graph of the population(s) over time fitted with trendline(s) and titles, giving the user the option to save the visualization
+            ** The function outputs a graph of the population(s) (columns 2+) over the first column fitted with trendline(s) and titles, giving the user the option to save the visualization
         
-        * Hypothesis function 3: Comparing two proportions
-            ** The function asks the user for a dataframe with at least 3 columns - the first must be a datetime, the second must be the total number of observations, and the third+ be the number of observations with a specific characteristic of interest 
+        * Hypothesis function 3: Comparing two proportions 
             ** The function validates the dataframe and outputs an error message if necessary
             ** If no error in the dataframe format/content the function will:
-                *** Notify the user that it will perform one or more hypothesis tests and state them in terms of the columns provided. It will also state that it will run a 2-sample Z test for proportions with a 0.05 significance level to make inferences about the hypotheses
-                *** Notify the user of the two values in the datetime column of the provided dataframe that will be used for the 2 samples
+                *** Notify the user that it will perform a 2-sample Z test for proportions with a 0.05 significance level to make inferences about the hypotheses
+                *** Notify the user of the two values in the  first column of the provided dataframe that will be used for the 2 samples
             The function outputs:
                 *** The test statistic, p-value, and whether or not the null hypothesis was rejected, for each of the 2-sample proportion tests performed
-                *** A line chart showing the change in the third+ columns over time
+                *** A line chart showing the change in the second+ columns over time
 
     - Assumptions:
         * Data necessary to answer questions has been combined across separate PDFs/tables into single dataframes
