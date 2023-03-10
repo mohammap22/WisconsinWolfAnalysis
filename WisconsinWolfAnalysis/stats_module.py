@@ -93,7 +93,7 @@ def hypothesis_function_one(filepath):
           "\n")
 
     # Graphing the line of best fit and the data
-    sns.scatterplot(x=x_var, y=y_var)
+    sns.scatterplot(x=x_var, y=y_var).set_title("Linear Regression")
     line_of_best_fit = []
     #pylint: disable=consider-using-enumerate)
     for i in range(len(x_var)):
@@ -138,12 +138,14 @@ def hypothesis_function_two(filepath):
     if graph_df.isnull().values.any():
         raise ValueError("Data may not have any null values")
 
+    print("\nTIME SERIES GRAPH (2):\n")
     # Creating the graphs using Seaborn
     x_var = graph_df.columns[0]
     graph_df_melted = graph_df.melt(x_var, var_name="Populations",
                                     value_name="Counts")
     sns.lineplot(data=graph_df_melted, x=x_var, y="Counts",
-                 hue="Populations")
+                 hue="Populations").set_title("Population(s) Over Time")
+    #plot.set(xlabel='datetime')
     plt.show()
     #pylint: disable=too-many-locals
 
@@ -165,16 +167,16 @@ def hypothesis_function_three(filepath):
 
     # Save the provided CSV as a pandas DataFrame
     if filepath[-4:] != ".csv":
-        raise TypeError("Error: the provided file must be a CSV.")
+        raise TypeError("Error: the provided file must be a CSV")
     prop_df = pd.read_csv(filepath)
     # Ensure the DataFrame is valid
     if not len(prop_df.axes[0]) >= 2:
-        raise ValueError("Error: the provided CSV must have at least 2 rows.")
+        raise ValueError("Error: the provided CSV must have at least 2 rows")
     if not len(prop_df.axes[1]) >= 3:
         raise ValueError("Error: the provided CSV must have at least 3" +
-                         " columns.")
+                         " columns")
     if prop_df.isnull().values.any():
-        raise ValueError("Error: the provided CSV must have no NaN values.")
+        raise ValueError("Error: the provided CSV must have no NaN values")
     print("\nPROPORTION HYPOTHESIS TEST (3):\n"
           "\nThe program will perform a 2-sample Z test for proportions at the"
           " 0.05 significance level for each provided variable.\n"
@@ -204,7 +206,7 @@ def hypothesis_function_three(filepath):
         # perform test
         test_stat, pval = proportions_ztest(successes_ls, total_obs_ls)
 
-        print("****\n")
+        print("****")
         print("VARIABLE: " + col_name + "\nNULL HYPOTHESIS: proportion in "
               "" + str(time1) + " = proportion in " + str(time2) + ".\n")
 
@@ -213,20 +215,21 @@ def hypothesis_function_three(filepath):
 
         # Reject null hypothesis
         if pval <= 0.05:
-            print("Result: reject null hypothesis that \nproportion 1 of "
+            print("Result: REJECT null hypothesis that \nproportion 1 of "
                   "" + str(prop1) + " = proportion 2 of " + str(prop2) + ".\n"
                   "Test Statistic: " + str(test_stat) + "\np-value: "
                   "" + str(pval) + "\n")
 
         # Fail to reject null hypothesis
         else:
-            print("Result: fail to reject null hypothesis that\nproportion 1"
-                  " of " + str(prop1) + " = proportion 2 of " + str(prop2)
+            print("Result: FAIL TO REJECT null hypothesis that\nproportion 1 "
+                  "of " + str(prop1) + " = proportion 2 of " + str(prop2)
                   + ".\n"
                   "Test Statistic: " + str(test_stat) + "\np-value: "
                   "" + str(pval) + "\n")
 
-    print("------------------------------------------------------------------")
+    print("------------------------------------------------------------------"
+          "\n\n")
 
     # --------------------Plot the data------------------------------------
 
@@ -258,7 +261,7 @@ def hypothesis_function_three(filepath):
     df_prop_melted = pd.melt(frame=df_prop, id_vars=["datetime"],
                              var_name="Categories", value_name="Proportions")
     sns.lineplot(data=df_prop_melted, x=x_var, y="Proportions",
-                 hue="Categories")
+                 hue="Categories").set_title("Proportion(s) Over Time")
     plt.show()
 
     # df_no_pop = df.drop(columns=df.columns[1], axis=1, inplace=False)
