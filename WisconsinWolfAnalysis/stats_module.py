@@ -1,4 +1,13 @@
-"""PROGRAM DOCSTRING GOES HERE"""
+"""
+This module contains hypothesis functions one, two and three
+-----------------------------Function----------------------------------
+hypothesis_function_one: calc correlation between 2 vars and graphs it
+hypothesis_function_two: graphs populations over time
+hypothesis_function_three: compares two %s and graphs vars over time
+--------------------------------Exceptions-----------------------------
+TypeError: raised if inputs do not meet specifications
+ValueError: raised if inputs do not meet specifications
+"""
 
 from scipy.stats import pearsonr, linregress
 from statsmodels.stats.proportion import proportions_ztest
@@ -21,12 +30,15 @@ def hypothesis_function_one(filepath):
     p_value: numeric
         p-value of the Pearson R correlation
     -----------------------------Side Effects--------------------------
-    None
+    Prints graph with population 1 vs. population 2 and best fit line
+        in an independent window
     ------------------------------Exceptions---------------------------
     TypeError raised if:
         The input file isn't a csv, doesn't have 3 columns,
         the final two columns aren't numeric type, there are fewer
-        than 2 rows in the data frame, there are null values
+        than 2 rows in the data frame
+    ValueError raised if:
+        There are null values in the input table
     """
 
     # Putting the file into pandas and testing
@@ -37,7 +49,6 @@ def hypothesis_function_one(filepath):
         raise TypeError("CSV file must have exactly 3 columns")
     if (not is_numeric_dtype(correlation_df.iloc[:, 1]) or not
        is_numeric_dtype(correlation_df.iloc[:, 2])):
-
         raise TypeError("Data in 2nd and 3rd column must be numeric")
     if len(correlation_df) < 2:
         raise TypeError("Data must have at least 2 samples (rows)")
@@ -105,13 +116,16 @@ def hypothesis_function_two(filepath):
     --------------------------Return Values----------------------------
     None
     -----------------------------Side Effects--------------------------
-    Prints a graph of the second+ columns vs. the first column to the
-        screen
+    Prints a graph with the first column on the x axis and the remaining
+        columns on the y-axis
     ------------------------------Exceptions---------------------------
     TypeError raised if:
         The input file isn't a csv, dataframe doesn't have >2 columns,
-        the columns aren't all numeric, there are null values
+        the columns aren't all numeric
+    ValueError raised if:
+        Input file contains null values
     """
+
     # Putting the file into pandas and testing
     if filepath[-4:] != '.csv':
         raise TypeError('File must be a csv')
@@ -136,28 +150,36 @@ def hypothesis_function_two(filepath):
     #pylint: disable=too-many-locals
 
 def hypothesis_function_three(filepath):
-    """MODULE DOCSTRING GOES HERE"""
+    """    
+    Brief description
+    ---------------------------Arguments-------------------------------
+    var: type
+        description
+    --------------------------Return Values----------------------------
+    var: type
+        description
+    -----------------------------Side Effects--------------------------
+    side effects
+    ------------------------------Exceptions---------------------------
+    <Error> raised if:
+        <conditions>
+    """
 
     # Save the provided CSV as a pandas DataFrame
     if filepath[-4:] != ".csv":
         raise TypeError("Error: the provided file must be a CSV")
     prop_df = pd.read_csv(filepath)
-
     # Ensure the DataFrame is valid
     if not len(prop_df.axes[0]) >= 2:
         raise ValueError("Error: the provided CSV must have at least 2 rows")
-
     if not len(prop_df.axes[1]) >= 3:
         raise ValueError("Error: the provided CSV must have at least 3" +
                          " columns")
-
     if prop_df.isnull().values.any():
         raise ValueError("Error: the provided CSV must have no NaN values")
-
     print("\nPROPORTION HYPOTHESIS TEST (3):\n"
-          "\nThe program will perform a 2-sample Z test for proportions at the "
-          "0.05 significance level for each provided variable\nand plot a graph"
-          " of the proportion(s) over time.\n\n"
+          "\nThe program will perform a 2-sample Z test for proportions at the"
+          " 0.05 significance level for each provided variable.\n"
           "-------------------------RESULTS-------------------------"
           "\n")
 
@@ -263,5 +285,3 @@ def hypothesis_function_three(filepath):
     # sns.lineplot(data = df_melted, x = x_var, y = "Proportions",
     #              hue = "Populations")
     # plt.show()
-
-# hypothesis_function_one('./pdf/test_files/wolf_and_deer_pop.csv')

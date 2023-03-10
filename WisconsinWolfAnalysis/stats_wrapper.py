@@ -1,7 +1,10 @@
 """Docstring Goes Here"""
 
+<<<<<<< HEAD
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
+=======
+>>>>>>> main
 from stats_module import (hypothesis_function_one,
                           hypothesis_function_two,
                           hypothesis_function_three)
