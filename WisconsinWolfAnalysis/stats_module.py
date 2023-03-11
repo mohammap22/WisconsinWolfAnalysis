@@ -1,10 +1,14 @@
 """
 This module contains hypothesis functions one, two and three
------------------------------Function----------------------------------
+
+Function
+----------------------------------
 hypothesis_function_one: calc correlation between 2 vars and graphs it
 hypothesis_function_two: graphs populations over time
 hypothesis_function_three: compares two %s and graphs vars over time
---------------------------------Exceptions-----------------------------
+
+Exceptions
+-----------------------------
 TypeError: raised if inputs do not meet specifications
 ValueError: raised if inputs do not meet specifications
 """
@@ -21,18 +25,26 @@ def hypothesis_function_one(filepath):
     """
     This function will calculate the correlation between two
     populations over time
-    ---------------------------Arguments-------------------------------
+    
+    Arguments
+    -------------------------------
     filepath: string
         Filepath to csv file for correlation analysis
-    --------------------------Return Values----------------------------
+    
+    Return Values
+    ----------------------------
     corr_coeff: numeric
         Pearson R correlation coefficient calculated via Scipy
     p_value: numeric
         p-value of the Pearson R correlation
-    -----------------------------Side Effects--------------------------
+    
+    Side Effects
+    --------------------------
     Prints graph with population 1 vs. population 2 and best fit line
         in an independent window
-    ------------------------------Exceptions---------------------------
+    
+    Exceptions
+    ---------------------------
     TypeError raised if:
         The input file isn't a csv, doesn't have 3 columns,
         the final two columns aren't numeric type, there are fewer
@@ -110,15 +122,23 @@ def hypothesis_function_one(filepath):
 def hypothesis_function_two(filepath):
     """
     This function will produce a graph with populations over time
-    ---------------------------Arguments-------------------------------
+    
+    Arguments
+    -------------------------------
     filepath: string
         Filepath to csv file for correlation analysis
-    --------------------------Return Values----------------------------
+    
+    Return Values
+    ----------------------------
     None
-    -----------------------------Side Effects--------------------------
+    
+    Side Effects
+    --------------------------
     Prints a graph with the first column on the x axis and the remaining
         columns on the y-axis
-    ------------------------------Exceptions---------------------------
+    
+    Exceptions
+    ---------------------------
     TypeError raised if:
         The input file isn't a csv, dataframe doesn't have >2 columns,
         the columns aren't all numeric
@@ -150,19 +170,31 @@ def hypothesis_function_two(filepath):
     #pylint: disable=too-many-locals
 
 def hypothesis_function_three(filepath):
-    """    
-    Brief description
-    ---------------------------Arguments-------------------------------
-    var: type
-        description
-    --------------------------Return Values----------------------------
-    var: type
-        description
-    -----------------------------Side Effects--------------------------
-    side effects
-    ------------------------------Exceptions---------------------------
-    <Error> raised if:
-        <conditions>
+    """
+    This function will perform 2-sample Z-tests for proportions and plot them
+    over time
+    
+    Arguments
+    -------------------------------
+    filepath: string
+        Filepath to csv file for hypothesis testing
+    
+    Return Values
+    ----------------------------
+    None
+    
+    Side Effects
+    --------------------------
+    Prints the results of the tests to the terminal and plots a graph in
+    Seaborn
+    
+    Exceptions
+    ---------------------------
+    TypeError raised if:
+        The input file isn't a csv
+    ValueError raised if:
+        The input file does not have at least 3 columns and 2 rows or there are
+        null values in the input table
     """
 
     # Save the provided CSV as a pandas DataFrame
@@ -193,7 +225,8 @@ def hypothesis_function_three(filepath):
     total_obs_ls = [total_obs1, total_obs2]
 
     # drop first 2 columns
-    df_dropped = prop_df.drop(columns=prop_df.columns[0:2], axis=1, inplace=False)
+    df_dropped = prop_df.drop(columns=prop_df.columns[0:2], axis=1,
+                              inplace=False)
 
     # for each column in dropped df
     for (col_name, col_data) in df_dropped.iteritems():
@@ -237,7 +270,8 @@ def hypothesis_function_three(filepath):
     mydatetime = prop_df.iloc[:, 0]
 
     # Drop first 2 cols
-    df_dropped = prop_df.drop(columns=prop_df.columns[0:2], axis=1, inplace=False)
+    df_dropped = prop_df.drop(columns=prop_df.columns[0:2], axis=1,
+                              inplace=False)
 
     # Create a dataFrame with proportions instead of counts
     new_rows = []
@@ -263,25 +297,3 @@ def hypothesis_function_three(filepath):
     sns.lineplot(data=df_prop_melted, x=x_var, y="Proportions",
                  hue="Categories").set_title("Proportion(s) Over Time")
     plt.show()
-
-    # df_no_pop = df.drop(columns=df.columns[1], axis=1, inplace=False)
-    # x_var = df_no_pop.columns[0]
-    # df_no_pop_melted = df.melt(x_var, var_name="Categories",
-    #                            value_name="Counts")
-
-    # #for index, row in df_dropped.iterrows():
-    # for i in range(len(df_dropped.axes[0])):
-    #     #temp_row = row.copy()
-    #     temp_row = df_dropped
-
-    #     #iterate through the cols and create proportions
-    #     for j in range(len(row)):
-    #         temp_row[j] = row[j] / df.iloc[1]
-
-    # #Creating the graphs using Seaborn
-    # x_var = df.columns[0]
-    # df_melted = df.melt(x_var, var_name="Populations",
-    #                                 value_name="Proportions")
-    # sns.lineplot(data = df_melted, x = x_var, y = "Proportions",
-    #              hue = "Populations")
-    # plt.show()
