@@ -10,7 +10,7 @@ Exceptions
 ValueError: raised if inputs do not meet specifications
 """
 import warnings
-from stats.stats_analysis import (hypothesis_function_one,
+from stats_analysis import (hypothesis_function_one,
                                   hypothesis_function_two,
                                   hypothesis_function_three)
 
@@ -69,7 +69,8 @@ def wrapper():
                              "identifier), the 2nd is population 1 data, and "
                              "the 3rd is population 2 data.\n")
 
-            # A good test file: ./pdf/wolf_and_deer_pop.csv
+            # A good test file:
+            # ../test_files/stats_test_files/wolf_and_deer_pop.csv
             hypothesis_function_one(filepath)
 
         elif option == '2':

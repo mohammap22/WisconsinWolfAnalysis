@@ -21,7 +21,12 @@ Run the command:
 
 ## After Installation
 One needs to import tkinter before running anything in camelot. 
-In python run the code `import tkinter` 
+In python run the code `import tkinter`
+
+## Set-Up Virtual Environment
+- If you haven't already, clone the WisconsinWolfAnalysis repository to your local machine. 
+- Navigate to the repo in the command line. Then, create a new environment by entering the command `conda env create -f environment.yml`. It may take a while to install all of the packages. 
+- Before running any of the scripts or modules from the project, be sure to switch to the environment you just created in the previous step by entering `conda activate wolf_env`. 
 
 ## Extra Information
 [Camelot Documentation](https://camelot-py.readthedocs.io/en/master/user/install.html)
