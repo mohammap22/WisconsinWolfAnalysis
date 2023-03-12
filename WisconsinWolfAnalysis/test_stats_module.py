@@ -44,7 +44,7 @@ class UnitTests(unittest.TestCase):
             hypothesis_function_one(
                 'test_files/stats_test_files/wolf_and_deer_pop_nulls.csv')
 
-    @patch("Stats.stats_analysis.plt.show")
+    @patch("stats.stats_analysis.plt.show")
     def test_correlation_of_one(self, mock_show):
         # pylint: disable=unused-argument
         """This test verifies that we get a pearsons correlation of
