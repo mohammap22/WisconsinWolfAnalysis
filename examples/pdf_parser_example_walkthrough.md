@@ -7,7 +7,7 @@
 
 ## Before Use
 
-- Install all the required packages information in **doc/development.md**
+- Install all the required packages information in **doc/developer.md**
 - The pdf parser script is located within the **WisconsinWolfAnalysis** folder.
 - Install the PDF file(s) you want to extract data from and add it into the same directory as pdf_parser.py
 
