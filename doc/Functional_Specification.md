@@ -10,7 +10,25 @@ Questions of Interest:
 
 ## User Profile/Stories:
 
-### Story 1: Research Replicator
+### Story 1: A Reader
+- Who: 
+    * Someone who finds the report documenting the findings of our analysis
+    and who wishes to read it.
+- Wants:
+    * They may wish to learn the findings of our study and how it might impact
+    them, particularly if they live in an area inhabited by wolves. 
+    * Alternatively, they might be a frequent reader of academic journal
+    articles who wishes to learn about our findings and the process we employed
+    to arrive at those findings.  
+
+- Interaction Methods:
+    * They will interact with our work by reading our report.
+- Needs:
+    * They will need a means of accessing our report.
+- Skills:
+    * The casual reader will posses a 12th grade reading level.
+
+### Story 2: Research Replicator
 - Who: 
     * An individual with some technical and research experience who desires to
     repeat our analysis to verify its integrity or to learn new techniques. 
@@ -32,7 +50,7 @@ Questions of Interest:
     degree of documentation highlighting our unique implementation or
     application of common programming packages and statistical techniques.
 
-### Story 2: Research Expander
+### Story 3: Research Expander
 - Who: 
     * The Research Expander is an individual who wishes to build upon our work
     and take it in new directions. They also may posses more technical skills
@@ -61,24 +79,6 @@ Questions of Interest:
     highlighting our unique implementation or usage. 
     * Knowledge of software development, comfortable using the terminal and
     running scripts.
-
-### Story 3: A Reader
-- Who: 
-    * Someone who finds the report documenting the findings of our analysis
-    and who wishes to read it.
-- Wants:
-    * They may wish to learn the findings of our study and how it might impact
-    them, particularly if they live in an area inhabited by wolves. 
-    * Alternatively, they might be a frequent reader of academic journal
-    articles who wishes to learn about our findings and the process we employed
-    to arrive at those findings.  
-
-- Interaction Methods:
-    * They will interact with our work by reading our report.
-- Needs:
-    * They will need a means of accessing our report.
-- Skills:
-    * The casual reader will posses a 12th grade reading level.
 
 ## Data Sources:
 Question 1: 
