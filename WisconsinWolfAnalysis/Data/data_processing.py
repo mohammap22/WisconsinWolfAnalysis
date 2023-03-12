@@ -14,6 +14,8 @@ import camelot
 # pylint: disable-msg=too-many-locals
 # pylint: disable-msg=too-many-nested-blocks
 # pylint: disable-msg=too-many-branches
+
+
 def pdf_parser(pdf_files_list, pdf_folder):
     """
     Extracts data tables from a list of PDF files. For each file, it
@@ -111,6 +113,7 @@ def pdf_parser(pdf_files_list, pdf_folder):
                     pdf_folder, directory_name, "BadData", file_name
                     + str(i) + '.csv'), index=False)
 
+
 def make_file_names(cols):
     """
     Replaces bad names for
@@ -145,16 +148,14 @@ def data_merger(pdf_file_list, pdf_folder, match_string):
 
     csv_path_list = []
     for pdf_file in pdf_file_list:
-        #pdf_good_data_csv_path = pdf_file[:-4]+'/GoodData/*.csv'
-        pdf_good_data_csv_list = glob.glob(pdf_file[:-4]+'GoodData/*.csv')
-        #pdf_merged_data_csv_path = pdf_file[:-4]+'/Merged_Data/*.csv'
-        pdf_merged_data_csv_list = glob.glob(pdf_file[:-4]+'/Merged_Data/*.csv')
+        pdf_good_data_csv_list = glob.glob(pdf_file[:-4] + '/GoodData/*.csv')
+        pdf_merged_data_csv_list = glob.glob(pdf_file[:-4] +
+                                             '/Merged_Data/*.csv')
         csv_path_list = csv_path_list + pdf_good_data_csv_list
         csv_path_list = csv_path_list + pdf_merged_data_csv_list
 
     df_list = []
     for csv_file_path in csv_path_list:
-        #given_df = pd.read_csv(csv_file_path)
         df_list.append(pd.read_csv(csv_file_path))
 
     result_list = []
@@ -166,7 +167,6 @@ def data_merger(pdf_file_list, pdf_folder, match_string):
             match_value = rows.iat[i, -2]
             if isinstance(match_value, str):
                 match_value = match_value.replace(",", "")
-                #match_value_num = float(match_value)
                 match_value = float(match_value)
             result_list.append([year, match_value])
 

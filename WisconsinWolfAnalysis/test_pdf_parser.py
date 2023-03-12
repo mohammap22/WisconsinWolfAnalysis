@@ -7,7 +7,7 @@ pdf_parser is function being tested
 import unittest
 import os
 import shutil
-from pdf_parser import pdf_parser
+from Data.data_processing import pdf_parser
 
 
 class TestPdfParser(unittest.TestCase):
@@ -24,6 +24,7 @@ class TestPdfParser(unittest.TestCase):
     def tearDownClass(cls):
         """Clean up test data"""
         shutil.rmtree("WolfReport2022")
+        shutil.rmtree("WolfReport2021")
 
     def test_directory_creation(self):
         """
