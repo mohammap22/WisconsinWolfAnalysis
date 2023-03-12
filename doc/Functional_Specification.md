@@ -1,6 +1,3 @@
-Background. The problem being addressed.
-Data sources. What data you will use and how it is structured.
-
 # Functional Specification:
 
 ## Background:
