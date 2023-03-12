@@ -11,8 +11,6 @@ Questions of Interest:
 - Has the growing wolf population led to an increase in the number of interactions between people and wolves?
 - Time permitting, how have the lives and deaths of wolves changed over the reporting period?
 
-3 project components - PDF data parser, data checker, statistical analyzer
-
 ## User Profile/Stories:
 
 ### Story 1: Research Replicator
