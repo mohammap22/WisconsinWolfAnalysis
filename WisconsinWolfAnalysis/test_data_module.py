@@ -10,7 +10,7 @@ import unittest
 
 import pandas as pd
 
-from Data.data_processing import pdf_parser, combine_csv_files
+from data.data_processing import pdf_parser, combine_csv_files
 
 
 class TestPdfParser(unittest.TestCase):

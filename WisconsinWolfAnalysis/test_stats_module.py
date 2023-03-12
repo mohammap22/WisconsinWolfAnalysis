@@ -2,7 +2,7 @@
 
 import unittest
 from unittest.mock import patch
-from Stats.stats_analysis import (hypothesis_function_one,
+from stats.stats_analysis import (hypothesis_function_one,
                                   hypothesis_function_two,
                                   hypothesis_function_three)
 

@@ -6,7 +6,7 @@ import re
 
 import pandas as pd
 
-from Data.data_processing import (pdf_parser,
+from data.data_processing import (pdf_parser,
                                   data_extractor,
                                   combine_csv_files)
 
