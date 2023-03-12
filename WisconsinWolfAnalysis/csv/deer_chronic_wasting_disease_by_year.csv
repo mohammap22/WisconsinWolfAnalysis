@@ -1,4 +1,4 @@
-year,number tested,CWD positive,percent positive
+year,number of samples,CWD Positive,Percent CWD Positive
 2002,40116,205,0.5110180476617808
 2003,14939,117,0.7831849521386973
 2004,19139,145,0.7576153404044098
