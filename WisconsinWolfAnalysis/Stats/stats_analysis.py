@@ -25,24 +25,24 @@ def hypothesis_function_one(filepath):
     """
     This function will calculate the correlation between two
     populations over time
-    
+
     Arguments
     -------------------------------
     filepath: string
         Filepath to csv file for correlation analysis
-    
+
     Return Values
     ----------------------------
     corr_coeff: numeric
         Pearson R correlation coefficient calculated via Scipy
     p_value: numeric
         p-value of the Pearson R correlation
-    
+
     Side Effects
     --------------------------
     Prints graph with population 1 vs. population 2 and best fit line
         in an independent window
-    
+
     Exceptions
     ---------------------------
     TypeError raised if:
@@ -107,7 +107,7 @@ def hypothesis_function_one(filepath):
     # Graphing the line of best fit and the data
     sns.scatterplot(x=x_var, y=y_var).set_title("Linear Regression")
     line_of_best_fit = []
-    #pylint: disable=consider-using-enumerate)
+    # pylint: disable=consider-using-enumerate)
     for i in range(len(x_var)):
         line_of_best_fit.append(intercept + slope*x_var[i])
     plt.plot(x_var, line_of_best_fit, color='orange')
@@ -122,21 +122,21 @@ def hypothesis_function_one(filepath):
 def hypothesis_function_two(filepath):
     """
     This function will produce a graph with populations over time
-    
+
     Arguments
     -------------------------------
     filepath: string
         Filepath to csv file for correlation analysis
-    
+
     Return Values
     ----------------------------
     None
-    
+
     Side Effects
     --------------------------
     Prints a graph with the first column on the x axis and the remaining
         columns on the y-axis
-    
+
     Exceptions
     ---------------------------
     TypeError raised if:
@@ -165,29 +165,30 @@ def hypothesis_function_two(filepath):
                                     value_name="Counts")
     sns.lineplot(data=graph_df_melted, x=x_var, y="Counts",
                  hue="Populations").set_title("Population(s) Over Time")
-    #plot.set(xlabel='datetime')
+    # plot.set(xlabel='datetime')
     plt.show()
-    #pylint: disable=too-many-locals
+    # pylint: disable=too-many-locals
+
 
 def hypothesis_function_three(filepath):
     """
     This function will perform 2-sample Z-tests for proportions and plot them
     over time
-    
+
     Arguments
     -------------------------------
     filepath: string
         Filepath to csv file for hypothesis testing
-    
+
     Return Values
     ----------------------------
     None
-    
+
     Side Effects
     --------------------------
     Prints the results of the tests to the terminal and plots a graph in
     Seaborn
-    
+
     Exceptions
     ---------------------------
     TypeError raised if:
@@ -279,7 +280,7 @@ def hypothesis_function_three(filepath):
         temp_row = row.copy()
 
         # create proportions
-        #pylint: disable=consider-using-enumerate
+        # pylint: disable=consider-using-enumerate
         for i in range(len(row)):
             temp_row[i] = row[i] / pop_counts[index]
 

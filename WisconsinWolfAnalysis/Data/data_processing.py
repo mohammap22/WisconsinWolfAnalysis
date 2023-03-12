@@ -5,10 +5,13 @@ importing glob for filesystem
 Importing Pandas for dataframe parsing
 Importing Camelot for PDF parsing
 """
-import os
-import re
 import glob
+import re
+import os
+import warnings
+
 import pandas as pd
+
 import camelot
 
 # pylint: disable-msg=too-many-locals
@@ -16,7 +19,7 @@ import camelot
 # pylint: disable-msg=too-many-branches
 
 
-def pdf_parser(pdf_files_list, pdf_folder):
+def pdf_parser(pdf_files_list, pdf_folder, show_warnings=False):
     """
     Extracts data tables from a list of PDF files. For each file, it
     creates a folder in the pdf_folder directory. Within that folder for
@@ -48,8 +51,11 @@ def pdf_parser(pdf_files_list, pdf_folder):
         merged_data_dir = os.path.join(pdf_folder, directory_name,
                                        "Merged_Data")
         os.makedirs(merged_data_dir, exist_ok=True)
-        tables = camelot.read_pdf(
-            file_location, pages="all", flavor='stream', edge_tol=500)
+        warnings.filterwarnings("ignore")
+        tables = camelot.read_pdf(file_location, pages="all", flavor='stream',
+                                  edge_tol=500,
+                                  suppress_stdout=show_warnings)
+        warnings.resetwarnings()
 
         for i, table in enumerate(tables):
             given_df = table.df.applymap(is_sentence)
@@ -138,12 +144,39 @@ def is_sentence(cell):
     return cell
 
 
-def data_merger(pdf_file_list, pdf_folder, match_string):
-    """
-    Merging dataframes based upon
-    the column names inside the
-    'CombinedData' directory
-    """
+def data_extractor(pdf_file_list, pdf_folder, match_string, label,
+                   output_file):
+    '''
+    For all PDF files in pdf_file_list within pdf_folder, this program
+    will import all of the .csv files in GoodData and Merged_Data folders
+    then look through each of them for a user-specified match_string. If
+    the string is found, then the last two columns from that row will be
+    added to an output dataframe. Those will be a value and year
+    associated with that value. The output dataframe is processed to remove
+    nans and to only keep the most recent row from each year.
+
+    Parameters
+    ----------
+    pdf_file_list : LIST OF STRINGS
+        A list of PDF files. Each file should have a folder in pdf_folder
+        and within the folder for the file there should be subfolders for
+        good data and merged data.
+    pdf_folder : STRING
+        The folder location where the PDFs and their associated data
+        folders reside.
+    match_string : STRING
+        The row name to extact from the data.
+    label : STRING
+        A column label for the extracted parameter in the output dataframe.
+    output_file : STRING
+        A filepath and file name to write a csv to containing the extracted
+        dataframe.
+
+    Returns
+    -------
+    None.
+
+    '''
     os.makedirs(os.path.join(pdf_folder, "CombinedData"), exist_ok=True)
 
     csv_path_list = []
@@ -173,19 +206,97 @@ def data_merger(pdf_file_list, pdf_folder, match_string):
     output_df = pd.DataFrame(result_list)
     output_df = output_df.drop_duplicates()
     output_df = output_df.dropna()
+    output_df.columns = ['year', label]
 
-    output_df.columns = ['Year', match_string]
+    year_counts = output_df.year.value_counts()
+    for i in range(0, len(year_counts)):
+        selected_year = year_counts.index[i]
+        num_to_remove = year_counts[selected_year] - 1
+        removed_count = 0
+        while removed_count < num_to_remove:
+            output_df = output_df.drop(output_df[output_df.year ==
+                                                 selected_year][0:1].index[0])
+            removed_count = removed_count + 1
 
-    return output_df
+    output_df.to_csv(output_file, index=False)
 
 
-PDF_LIST = glob.glob('pdf/*.pdf')
+def combine_csv_files(csv_file_1, column_name_1,
+                      csv_file_2, column_name_2,
+                      output_file):
+    '''
+    This program combines subsets of two csv files for trend analysis.
+    It expects two csv files, each with a "year" column and some number
+    of data columns. The user specifies one of these data columns from
+    each file. For each year that is in both files, a row is added to a
+    dataframe with the year, the corresponding value from the specified
+    column in the first file, and the corresponding value from the
+    specified column in the second file. This dataframe is then written
+    to the user-specified output_file.
 
-# pdf_parser(pdf_list, 'pdf/')
+    Parameters
+    ----------
+    csv_file_1 : STR
+        The first csv file from which data will be extracted
+    column_name_1 : STR
+        The column name in the first file to add to the combined file
+    csv_file_2 : STR
+        The second csv file from which data will be extracted
+    column_name_2 : STR
+        The column name in the second file to add to the combined file
+    output_file : STR
+        The file path and name for the output file.
 
-CATTLE_KILLED = data_merger(PDF_LIST, 'pdf/', 'Cattle Killed')
+    Raises
+    ------
+    TypeError
+        A TypeError is raised if either of the files are not .csv files.
+    ValueError
+        A ValueError is raised if either of the .csv files does not contain
+        a column labeled "year" or the user specified column name for that
+        file.
 
-INVESTIGATIONS = data_merger(PDF_LIST, 'pdf/',
-                             '# of Wolf related Investigations conducted:')
+    Returns
+    -------
+    None.
 
-OBSERVATIONS = data_merger(PDF_LIST, 'pdf/', 'Statewide')
+    '''
+
+    if csv_file_1[-4:] != '.csv':
+        raise TypeError(csv_file_1 + ' must be a csv')
+    df_1 = pd.read_csv(csv_file_1)
+
+    if csv_file_2[-4:] != '.csv':
+        raise TypeError(csv_file_2 + ' must be a csv')
+    df_2 = pd.read_csv(csv_file_2)
+
+    if 'year' in df_1.columns:
+        csv_1_years = df_1.year.tolist()
+    else:
+        raise ValueError(csv_file_1 + ' does not contain a "year" column')
+
+    if 'year' in df_2.columns:
+        csv_2_years = df_2.year.tolist()
+    else:
+        raise ValueError(csv_file_2 + ' does not contain a "year" column')
+
+    if column_name_1 not in df_1.columns:
+        raise ValueError(csv_file_1 + 'does not contain a ' +
+                         column_name_1 + ' column')
+
+    if column_name_2 not in df_2.columns:
+        raise ValueError(csv_file_2 + 'does not contain a ' +
+                         column_name_2 + ' column')
+
+    combined_list = []
+    for year in csv_1_years:
+        if year in csv_2_years:
+            csv_1_value = df_1[df_1.year == year][column_name_1].values[0]
+            csv_2_value = df_2[df_2.year == year][column_name_2].values[0]
+
+            combined_list.append([year, csv_1_value, csv_2_value])
+
+    output_df = pd.DataFrame(combined_list)
+    output_df.columns = ['year', column_name_1, column_name_2]
+
+    output_df.to_csv(output_file, index=False)
