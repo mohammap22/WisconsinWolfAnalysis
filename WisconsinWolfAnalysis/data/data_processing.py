@@ -1,10 +1,28 @@
 """
-Importing os for file creation
-Importion re for regex
-importing glob for filesystem
-Importing Pandas for dataframe parsing
-Importing Camelot for PDF parsing
+This module contains five functions to process data from pdf files and
+csv files.
+
+Functions:
+----------------------------------
+-pdf_parser: extracts tables from list of pdf files using the camelot
+pdf extraction package, then checks the resulting data frames and saves
+them into bad, good, and merged data folders
+-make_file_name: replaces special characters with a word representation
+so column headers can be used to name the output files from pdf_parser.
+-is_sentance: checks if a given cell is a sentance or not.
+-data_extractor: searches the outputs of PDF parser for a specified
+string and combines all instances of the found string into a new csv
+file.
+-combine_csv_files: accepts two csv files with a year column and
+outputs a new csv file with the years in both files along with a
+specified column from each file.
+
+Exceptions
+-----------------------------
+TypeError: raised if inputs do not meet specifications
+ValueError: raised if inputs do not meet specifications
 """
+
 import glob
 import re
 import os
@@ -29,6 +47,8 @@ def pdf_parser(pdf_files_list, pdf_folder, show_warnings=False):
     Inputs:
     :pdf_files_list - a list of files from which data will be extracted
     :pdf_folder - a folder location to save the output files.
+    :show_warnings (defaul to False): suppresses the warning from pdf
+    parser.
     Ouputs:
     :nothing is returned by this function, but it will create folders
     and data files of the data in the pdfs that are ind pdf_file_list
@@ -177,8 +197,17 @@ def data_extractor(pdf_file_list, pdf_folder, match_string, label,
     None.
 
     '''
-    os.makedirs(os.path.join(pdf_folder, "CombinedData"), exist_ok=True)
+    if not isinstance(pdf_file_list, list):
+        raise TypeError('pdf_file_list must be a list of files')
 
+    if not isinstance(match_string, str):
+        raise TypeError('match_string must be a string')
+
+    if not isinstance(label, str):
+        raise TypeError('label must be a string')
+
+    # make a list of all good and merged csv files associated with each
+    # file in the list.
     csv_path_list = []
     for pdf_file in pdf_file_list:
         pdf_good_data_csv_list = glob.glob(pdf_file[:-4] + '/GoodData/*.csv')
@@ -187,14 +216,20 @@ def data_extractor(pdf_file_list, pdf_folder, match_string, label,
         csv_path_list = csv_path_list + pdf_good_data_csv_list
         csv_path_list = csv_path_list + pdf_merged_data_csv_list
 
+    # make a list of each dataframes, one for each csv file
     df_list = []
     for csv_file_path in csv_path_list:
         df_list.append(pd.read_csv(csv_file_path))
 
+    # iterate through each dataframe and find any rows that include the
+    # user-specificed string to match. If there is a match, extract the
+    # last column (will be a year) and the second to last column
+    # (the total) from that row and store them for output
     result_list = []
     for my_df in df_list:
-        rows = my_df[(my_df == match_string).any(axis=1)]
-
+        # rows = my_df[(my_df == match_string).any(axis=1)]
+        rows = my_df[my_df.iloc[:, 0].astype(str).str.contains(match_string,
+                                                               na=False)]
         for i in range(len(rows)):
             year = rows.iat[i, -1]
             match_value = rows.iat[i, -2]
@@ -203,11 +238,13 @@ def data_extractor(pdf_file_list, pdf_folder, match_string, label,
                 match_value = float(match_value)
             result_list.append([year, match_value])
 
+    # clean and label the dataframe
     output_df = pd.DataFrame(result_list)
     output_df = output_df.drop_duplicates()
     output_df = output_df.dropna()
     output_df.columns = ['year', label]
 
+    # keep only the last entry for each year
     year_counts = output_df.year.value_counts()
     for i in range(0, len(year_counts)):
         selected_year = year_counts.index[i]
@@ -261,7 +298,7 @@ def combine_csv_files(csv_file_1, column_name_1,
     None.
 
     '''
-
+    # input error checking
     if csv_file_1[-4:] != '.csv':
         raise TypeError(csv_file_1 + ' must be a csv')
     df_1 = pd.read_csv(csv_file_1)
@@ -288,8 +325,10 @@ def combine_csv_files(csv_file_1, column_name_1,
         raise ValueError(csv_file_2 + 'does not contain a ' +
                          column_name_2 + ' column')
 
+    # combine the csv files
     combined_list = []
     for year in csv_1_years:
+        # only keep the year values if they are in both files.
         if year in csv_2_years:
             csv_1_value = df_1[df_1.year == year][column_name_1].values[0]
             csv_2_value = df_2[df_2.year == year][column_name_2].values[0]

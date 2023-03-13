@@ -10,7 +10,7 @@ import unittest
 
 import pandas as pd
 
-from data.data_processing import pdf_parser, combine_csv_files
+from data.data_processing import pdf_parser, data_extractor, combine_csv_files
 
 
 class TestPdfParser(unittest.TestCase):
@@ -84,6 +84,37 @@ class TestPdfParser(unittest.TestCase):
         self.assertTrue(len(merged_data_files) >= 1)
         for file in merged_data_files:
             self.assertTrue(file.endswith(".csv"))
+
+    def test_data_extractor_no_list(self):
+        with self.assertRaises(TypeError):
+            data_extractor("test_files/data_test_files/WolfReport2022.pdf",
+                           "test_files/data_test_files/", 'Cattle Killed',
+                           'cattle killed',
+                           "test_files/data_test_files/extractor_test.csv")
+
+    def test_data_extractor_bad_match_string(self):
+        with self.assertRaises(TypeError):
+            data_extractor(["test_files/data_test_files/WolfReport2022.pdf"],
+                           "test_files/data_test_files/", 5, 'cattle killed',
+                           "test_files/data_test_files/extractor_test.csv")
+
+    def test_data_extractor_bad_label(self):
+        with self.assertRaises(TypeError):
+            data_extractor(["test_files/data_test_files/WolfReport2022.pdf"],
+                           "test_files/data_test_files/", 'Cattle Killed',
+                           1, "test_files/data_test_files/extractor_test.csv")
+
+    def test_data_extractor_output(self):
+        data_extractor(["test_files/data_test_files/WolfReport2022.pdf"],
+                       "test_files/data_test_files/", 'Cattle Killed',
+                       'cattle killed',
+                       "test_files/data_test_files/extractor_test.csv")
+
+        df_test = pd.read_csv("test_files/data_test_files/extractor_test.csv")
+        df_key = pd.read_csv('test_files/data_test_files/extractor_KEY.csv')
+        check_equal = df_test.equals(df_key)
+        self.assertTrue(check_equal,
+                        msg="Result does not equal the expected result")
 
 
 class TestCombineCsvFiles(unittest.TestCase):
