@@ -5,6 +5,8 @@ channels:
 dependencies:
   - camelot-py=0.10.1
   - debugpy=1.5.1
+  - jupyter==1.0
+  - notebook==6.5
   - opencv=4.6.0
   - pandas=1.5.2
   - pip=22.3.1
