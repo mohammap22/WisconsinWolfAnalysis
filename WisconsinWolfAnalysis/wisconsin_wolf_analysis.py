@@ -6,6 +6,7 @@ import re
 
 import pandas as pd
 
+# pylint: disable=import-error
 from data.data_processing import (pdf_parser,
                                   data_extractor,
                                   combine_csv_files)
@@ -42,9 +43,9 @@ def run_data_extraction_and_combination():
 
     # Run the data extractor to pull data from the parsed pdfs and combine it
     # into a single csv file for each requested parameter.
-    data_extractor(pdf_list, './pdf', 'Cattle Killed', 'cattle killed',
+    data_extractor(pdf_list, 'Cattle Killed', 'cattle killed',
                    'csv/cattle_killed_by_year.csv')
-    data_extractor(pdf_list, '../pdf/', 'Statewide', 'observations',
+    data_extractor(pdf_list, 'Statewide', 'observations',
                    'csv/wolf_observations_by_year.csv')
 
     # Run the csv combiner to combine data from multiple csv files to prepare
