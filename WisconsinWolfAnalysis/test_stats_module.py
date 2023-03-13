@@ -2,6 +2,8 @@
 
 import unittest
 from unittest.mock import patch
+
+# pylint: disable=import-error
 from stats.stats_analysis import (hypothesis_function_one,
                                   hypothesis_function_two,
                                   hypothesis_function_three)

@@ -164,8 +164,7 @@ def is_sentence(cell):
     return cell
 
 
-def data_extractor(pdf_file_list, pdf_folder, match_string, label,
-                   output_file):
+def data_extractor(pdf_file_list, match_string, label, output_file):
     '''
     For all PDF files in pdf_file_list within pdf_folder, this program
     will import all of the .csv files in GoodData and Merged_Data folders
@@ -181,9 +180,6 @@ def data_extractor(pdf_file_list, pdf_folder, match_string, label,
         A list of PDF files. Each file should have a folder in pdf_folder
         and within the folder for the file there should be subfolders for
         good data and merged data.
-    pdf_folder : STRING
-        The folder location where the PDFs and their associated data
-        folders reside.
     match_string : STRING
         The row name to extact from the data.
     label : STRING

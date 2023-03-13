@@ -10,6 +10,7 @@ import unittest
 
 import pandas as pd
 
+# pylint: disable=import-error
 from data.data_processing import pdf_parser, data_extractor, combine_csv_files
 
 
@@ -86,28 +87,42 @@ class TestPdfParser(unittest.TestCase):
             self.assertTrue(file.endswith(".csv"))
 
     def test_data_extractor_no_list(self):
+        """
+        Tests to ensure a TypeError is returned if a pdf file is passed
+        into the data_extractor instead of a list of files.
+        """
         with self.assertRaises(TypeError):
             data_extractor("test_files/data_test_files/WolfReport2022.pdf",
-                           "test_files/data_test_files/", 'Cattle Killed',
-                           'cattle killed',
+                           'Cattle Killed', 'cattle killed',
                            "test_files/data_test_files/extractor_test.csv")
 
     def test_data_extractor_bad_match_string(self):
+        """
+        Tests to ensure a TypeError is returned if a non-string value is
+        entered as the match_string
+        """
         with self.assertRaises(TypeError):
             data_extractor(["test_files/data_test_files/WolfReport2022.pdf"],
-                           "test_files/data_test_files/", 5, 'cattle killed',
+                           5, 'cattle killed',
                            "test_files/data_test_files/extractor_test.csv")
 
     def test_data_extractor_bad_label(self):
+        """
+        Tests to ensure a TypeError is returned if a non-string value is
+        entered as the column label
+        """
         with self.assertRaises(TypeError):
             data_extractor(["test_files/data_test_files/WolfReport2022.pdf"],
-                           "test_files/data_test_files/", 'Cattle Killed',
-                           1, "test_files/data_test_files/extractor_test.csv")
+                           'Cattle Killed', 1,
+                           "test_files/data_test_files/extractor_test.csv")
 
     def test_data_extractor_output(self):
+        """
+        A smoke test to ensure the data_extractor produces the expected
+        result when given a single .pdf file.
+        """
         data_extractor(["test_files/data_test_files/WolfReport2022.pdf"],
-                       "test_files/data_test_files/", 'Cattle Killed',
-                       'cattle killed',
+                       'Cattle Killed', 'cattle killed',
                        "test_files/data_test_files/extractor_test.csv")
 
         df_test = pd.read_csv("test_files/data_test_files/extractor_test.csv")
