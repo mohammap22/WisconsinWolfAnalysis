@@ -12,7 +12,7 @@ ValueError: raised if inputs do not meet specifications
 import warnings
 
 # pylint: disable=import-error
-from stats_analysis import (hypothesis_function_one,
+from stats.stats_analysis import (hypothesis_function_one,
                             hypothesis_function_two,
                             hypothesis_function_three)
 
