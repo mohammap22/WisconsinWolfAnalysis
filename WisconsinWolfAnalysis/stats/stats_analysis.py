@@ -303,5 +303,3 @@ def hypothesis_function_three(filepath):
     sns.lineplot(data=df_prop_melted, x=x_var, y="Proportions",
                  hue="Categories").set_title("Proportion(s) Over Time")
     plt.show()
-
-hypothesis_function_one('WisconsinWolfAnalysis/pdf/wolf_pop_investigations.csv')
