@@ -227,8 +227,9 @@ def data_extractor(pdf_file_list, pdf_folder, match_string, label,
     # (the total) from that row and store them for output
     result_list = []
     for my_df in df_list:
-        rows = my_df[(my_df == match_string).any(axis=1)]
-
+        # rows = my_df[(my_df == match_string).any(axis=1)]
+        rows = my_df[my_df.iloc[:, 0].astype(str).str.contains(match_string,
+                                                               na=False)]
         for i in range(len(rows)):
             year = rows.iat[i, -1]
             match_value = rows.iat[i, -2]
