@@ -114,7 +114,8 @@ def hypothesis_function_one(filepath):
     plot_label = (f"Line of best fit:\n y ="
                   f"{round(intercept,2)} + {round(slope,2)}*x")
     plt.text(0.02, 0.9, s=plot_label, transform=plt.gca().transAxes,
-             bbox={"edgecolor": 'black', "facecolor": 'white'})
+             bbox={"edgecolor": 'black', "facecolor": 'white',
+                    "alpha":0.25})
     plt.show()
     return corr_coeff, p_value
 
