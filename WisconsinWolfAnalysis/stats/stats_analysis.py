@@ -86,7 +86,7 @@ def hypothesis_function_one(filepath):
     slope_pvalue = linear_regression[3]
     if slope_pvalue >= 0.05:
         print("FAIL TO REJECT null hypothesis of no linear relationship\n"
-              "WARNING: Linear regression model is not a good fit for"
+              "WARNING: Linear regression model is not a good fit for "
               "this data\n")
     elif slope_pvalue < 0.05:
         print("REJECT null hypothesis of no linear relationship\n")
