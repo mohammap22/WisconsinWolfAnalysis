@@ -13,7 +13,7 @@ in the stats module.
 
 ## How to Use
 - There are two methods you can run the tool. 
-   * To run it from the command line, navigate to the WisconsinWolfAnalysis repository in the terminal/command line. Then, navigate to **WisconsinWolfAnalysis/WisconsinWolfAnalysis/stats** and 
+   * To run it from the command line, navigate to the WisconsinWolfAnalysis repository in the terminal/command line. You will have to edit the `stats_wrapper.py` file at **WisconsinWolfAnalysis/WisconsinWolfAnalysis/stats/stats_wrapper.py** by removing "stats." from the line that begins with `from stats.stats_analysis import`. Then, navigate to the WisconsinWolfAnalysis repository in the terminal/command line. Then, navigate to **WisconsinWolfAnalysis/WisconsinWolfAnalysis/stats** and 
 run the stats_wrapper.py file by typing `python stats_wrapper.py` and then press enter. 
    * Alternatively, when running the tool from outside of the stats module package, you can import the function by add `from stats.stats_wrapper import wrapper` to your code. Then you can call the wrapper function by writing `wrapper()` in your code.
  - Once you start the tool, follow the prompts. First the script will ask you to specify which of the three options you would like to perform. You can provide multiple as a comma-separated list, 
