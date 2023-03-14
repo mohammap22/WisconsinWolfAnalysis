@@ -43,11 +43,14 @@
 `pdf_parser([WolfReport2017.pdf, WolfReport2018.pdf, WolfReport2019.pdf, WolfReport2020.pdf, WolfReport2021.pdf, WolfReport2022.pdf], 'pdf/', False)`
 `data_extractor([WolfReport2017.pdf, WolfReport2018.pdf, WolfReport2019.pdf, WolfReport2020.pdf, WolfReport2021.pdf, WolfReport2022.pdf], 'Cattle Killed', 'cattle killed', 'yearly_cattle_killed.csv')`
 These commands would produce the following file:
+
 ![Alt text](data_extractor_output.jpg  "Extracted Data")
 
 - To combine that with annual wolf population, use the combine_csv_files function. You can combine the cattle killed data with annual wolf population:
+
 ![Alt text](csv_combiner_input.jpg  "Wolf Population")
 `combine_csv_files('wolf_population.csv', 'wolf population', 'yearly_cattle_killed.csv', 'cattle killed', 'example.csv')`
 Which produces the following csv file
+
 ![Alt text](csv_combiner_output.jpg  "Combined CSV File")
 
