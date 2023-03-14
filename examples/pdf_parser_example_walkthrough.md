@@ -43,7 +43,8 @@
 `pdf_parser([WolfReport2017.pdf, WolfReport2018.pdf, WolfReport2019.pdf, WolfReport2020.pdf, WolfReport2021.pdf, WolfReport2022.pdf], 'pdf/', False)`
 
 `data_extractor([WolfReport2017.pdf, WolfReport2018.pdf, WolfReport2019.pdf, WolfReport2020.pdf, WolfReport2021.pdf, WolfReport2022.pdf], 'Cattle Killed', 'cattle killed', 'yearly_cattle_killed.csv')`
-These commands would produce the following file:
+
+- These commands would produce the following file:
 
 ![Alt text](data_extractor_output.jpg  "Extracted Data")
 
