@@ -41,6 +41,7 @@
 
 - If you've run pdf_parser on multiple years of WolfReports and wanted to get the "Cattle Killed" value from each file without looking through all of the .csv files by hand, you could run the pdf_parser on multiple files, then run data_extractor:
 `pdf_parser([WolfReport2017.pdf, WolfReport2018.pdf, WolfReport2019.pdf, WolfReport2020.pdf, WolfReport2021.pdf, WolfReport2022.pdf], 'pdf/', False)`
+
 `data_extractor([WolfReport2017.pdf, WolfReport2018.pdf, WolfReport2019.pdf, WolfReport2020.pdf, WolfReport2021.pdf, WolfReport2022.pdf], 'Cattle Killed', 'cattle killed', 'yearly_cattle_killed.csv')`
 These commands would produce the following file:
 
