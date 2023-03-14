@@ -49,7 +49,9 @@ These commands would produce the following file:
 - To combine that with annual wolf population, use the combine_csv_files function. You can combine the cattle killed data with annual wolf population:
 
 ![Alt text](csv_combiner_input.jpg  "Wolf Population")
+
 `combine_csv_files('wolf_population.csv', 'wolf population', 'yearly_cattle_killed.csv', 'cattle killed', 'example.csv')`
+
 Which produces the following csv file
 
 ![Alt text](csv_combiner_output.jpg  "Combined CSV File")
