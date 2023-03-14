@@ -164,11 +164,11 @@ def is_sentence(cell):
     return cell
 
 
-def data_extractor(pdf_file_list, match_string, label, output_file):
+def data_extractor(pdf_file_list, row_label, output_label, output_file):
     '''
     For all PDF files in pdf_file_list within pdf_folder, this program
     will import all of the .csv files in GoodData and Merged_Data folders
-    then look through each of them for a user-specified match_string. If
+    then look through each of them for a user-specified row_label. If
     the string is found, then the last two columns from that row will be
     added to an output dataframe. Those will be a value and year
     associated with that value. The output dataframe is processed to remove
@@ -180,9 +180,9 @@ def data_extractor(pdf_file_list, match_string, label, output_file):
         A list of PDF files. Each file should have a folder in pdf_folder
         and within the folder for the file there should be subfolders for
         good data and merged data.
-    match_string : STRING
+    row_label : STRING
         The row name to extact from the data.
-    label : STRING
+    output_label : STRING
         A column label for the extracted parameter in the output dataframe.
     output_file : STRING
         A filepath and file name to write a csv to containing the extracted
@@ -196,10 +196,10 @@ def data_extractor(pdf_file_list, match_string, label, output_file):
     if not isinstance(pdf_file_list, list):
         raise TypeError('pdf_file_list must be a list of files')
 
-    if not isinstance(match_string, str):
-        raise TypeError('match_string must be a string')
+    if not isinstance(row_label, str):
+        raise TypeError('row_label must be a string')
 
-    if not isinstance(label, str):
+    if not isinstance(output_label, str):
         raise TypeError('label must be a string')
 
     # make a list of all good and merged csv files associated with each
@@ -223,8 +223,7 @@ def data_extractor(pdf_file_list, match_string, label, output_file):
     # (the total) from that row and store them for output
     result_list = []
     for my_df in df_list:
-        # rows = my_df[(my_df == match_string).any(axis=1)]
-        rows = my_df[my_df.iloc[:, 0].astype(str).str.contains(match_string,
+        rows = my_df[my_df.iloc[:, 0].astype(str).str.contains(row_label,
                                                                na=False)]
         for i in range(len(rows)):
             year = rows.iat[i, -1]
@@ -238,7 +237,7 @@ def data_extractor(pdf_file_list, match_string, label, output_file):
     output_df = pd.DataFrame(result_list)
     output_df = output_df.drop_duplicates()
     output_df = output_df.dropna()
-    output_df.columns = ['year', label]
+    output_df.columns = ['year', output_label]
 
     # keep only the last entry for each year
     year_counts = output_df.year.value_counts()
