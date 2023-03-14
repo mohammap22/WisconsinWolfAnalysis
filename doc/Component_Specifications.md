@@ -12,75 +12,78 @@ The software components detailed below interact to allow a user interested in an
 ### Software Component 1: Data Ingestion Component
     - Component overview: Ingests tabular data from locally stored PDF files
 
-    - Inputs: Filepath to local directory containing downloaded PDF files with desired raw tabular data
+    - Inputs: 
+        * Filepath to local directory containing downloaded PDF files with desired raw tabular data
+        * Filepath to local directory where extracted data folders should be written.
 
     - Outputs: 
         * 1 directory per PDF filename passed in via input filepath
         * 1 directory in PDF filename directory containing successfully processed csv tables
-        * 1 directory in PDF filename directory containing csv tables for review
-        * Summary table of files read in per PDF and what folder they went into (e.g., 6 tables were successfully processed and stored in *filepath*. 5 tables were unsuccessfully processed and stored in *filepath* for review.)
-        * (intermediate, passed to Data Checking Component) Object for each table identified in each PDF
+        * 1 directory in PDF filename directory containing csv tables for review, these likely contain no usable data, but may be 
 
     - Design:
         * Module given filepath to local directory containing downloaded pdfs with tabular data
         * For each PDF:
             ** Create a directory with the name of the PDF
-            ** Create two sub-directories, one for well-proccessed files and one for poorly-processed files requiring human review
+            ** Create three sub-directories, one for well-proccessed files, one for poorly-processed files requiring human review, and one for merged files that contain dataframes with the same column names
             ** Run extraction library on PDF
-            ** Pass each object representing an identified table to Data Checking Component for quality validation, generation of storage location, and incremented counter
-            ** Save each extracted table of information as a CSV in the correct file location as determined by the Data Checking Component
+            ** Save each extracted table of information as a CSV in the correct file location based on the values and column headers in the extracted dataframe
 
     - Assumptions:
         * User has found, downloaded, and stored PDF information locally
-        * PDFs contain tabular data
+        * PDFs contain tabular data that can be read by camelot
         * External library tool is able to identify at least all valid tabular data
         * The user has storage space on their device avilable to handle the new directories and files
-    
-    - How it uses other components:
-        * Leverages Data Checking Component to generate filepaths used to store CSV table outputs and increment counter for summary table
 
-### Software Component 2: Data Checking Component
-    - Component overview: This component performs a light quality validation of each extracted object representing an identified table and returns the best storage filepath and incremented counter. Optional scope increase could include more robust validation of objects.
+### Software Component 2: Data Extraction Component
+    - Component overview: This component searches through PDF file trees that have been created by the data ingestion component and extracts a yearly total data from a user-specified row-label, then combines all of the matching data and writes to a csv file.
 
-    - Inputs: Objects representing each table identified in each PDF from Data Ingestion Component
+    - Inputs:
+        * List of PDF files to search through to extract data
+        * A row label
+        * An output file path
+        * A column label for the extracted data when writing to the output file
 
     - Outputs: 
-        * Filepath with extracted table save location based on data quality
-        * Incremented counter for Data Ingestion Component summary output
+        * A csv file containing a "year" column and a column with the extracted data from the PDFs
 
     - Design:
-        * For each object passed to Data Checking Component from Data Ingestion Component:
-            ** Perform light quality check on object - does it contain any values, are dimensions valid, etc.
-            ** Based on the outcome of the light quality checks, return a filepath to save the object to (e.g., pdf_name/successfully_parsed or pdf_name/for_review)
-            ** Increment counter for filepaths generated with "successfully_parsed" vs. "for_review"
+        * For each PDF file 
+            ** Import all of the data files deemed "good" by the data ingestion component
+            ** Search through the data for a row labeled with the user-specified row label
+            ** Store the total value (right-most column in the PDF data) from each matched row along with the year associated with that data point
+        * After processing all PDF files, remove any duplicate entries and save the data to the output file.
 
     - Assumptions:
         * User has found, downloaded, and stored PDF information locally
-        * PDFs contain tabular data
-        * External library tool is able to identify and generate objects for at least all valid data tables
+        * PDFs contain tabular data 
+        * PDFs have been run through the data ingestion component
         * The user has storage space on their device avilable to handle the new directories and files
-        * External library tool passes a usable dataframe for validation
             
     - How it uses other components:
-        * Inputs for the Data Checking Component are the object outputs from Data Ingestion Component
-        * Returns the generated filepath and counter to the Data Ingestion Component
+        * Inputs for the Data Extraction Component are the object outputs from Data Ingestion Component
+        * Outputs from the Data Extaction Component are the inputs to the Data Processing Component
 
 ### Software Component 3: Data Processing & Analysis File Creation Component
     - Component overview: This component was created to make our team's data processing repeatable and reusable. It will be tailored to the data used to answer our research question, but would be avilable to those wishing to re-do or update our analysis with new information.
 
-    - Inputs: CSV files generated by the Data Ingestion and Data Checking Components
+    - Inputs: 
+        * Two user-specified CSV files 
+        * A column name from each file that the user would like to combine
+        * An output path for the combined file
 
     - Outputs: 
         * CSV files with the data necessary to answer our statistical analysis questions
 
     - Design:
-        * Component takes in two or more CSVs from directory of PDF files and combines them to match specifications of example files
+        * Component takes in two CSVs files and a column name from each file. The data from the specified column in each csv file will be combined and saved to the output file along with a column for year. All years that are in each csv will be included in the output file, but any year in only one file will be dropped. 
 
     - Assumptions:
-        * The PDF parser was able to accurately and consistently extract information from the PDF reports
+        * The PDF parser was able to accurately and consistently extract information from the PDF reports.
+        * The files contain a column labeled "year"
             
     - How it uses other components:
-        * The inputs for this component are the outputs from the Data Ingestion and Data Checking Component
+        * The inputs for this component are the outputs from the Data Ingestion and Data Extractor Component
 
 ### Software Component 4: Statistical Analysis Wrapper Component
     - Component overview: This componet querries the user for which hypothesis tests they would like to perform and requests CSV files to execute the analysis.
