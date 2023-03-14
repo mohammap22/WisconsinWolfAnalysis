@@ -75,7 +75,9 @@ def hypothesis_function_one(filepath):
           "calculate \nthe Pearson Correlation Coefficient for the "
           "independent and dependent populations.\n"
           "All tests use 0.05 level of significance and two-sided"
-          " hypothesis tests.\n\n"
+          " hypothesis tests.\n"
+          "Researchers should verify independence, normality, "
+          "constant variance and linearity.\n\n"
           "-------------------------RESULTS-------------------------"
           "\n")
 
@@ -85,12 +87,14 @@ def hypothesis_function_one(filepath):
     slope = linear_regression[0]
     slope_pvalue = linear_regression[3]
     if slope_pvalue >= 0.05:
-        print("FAIL TO REJECT null hypothesis of no linear relationship\n"
-              "WARNING: Linear regression model is not a good fit for "
-              "this data\n")
+        print("FAIL TO REJECT null hypothesis of regression coefficient "
+              "equal to zero\n"
+              "WARNING: No statistically significant linear association"
+              " between predictor and outcome \n")
     elif slope_pvalue < 0.05:
-        print("REJECT null hypothesis of no linear relationship\n")
-
+        print("REJECT null hypothesis of regression coefficient "
+              "equal to zero\n")
+        
     # Correlation
     pearson_results = pearsonr(x_var, y_var)
     corr_coeff = round(pearson_results[0], 4)
